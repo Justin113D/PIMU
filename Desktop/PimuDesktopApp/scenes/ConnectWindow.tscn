@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://b26267roexyuc"]
+
+[ext_resource type="Script" uid="uid://bvvh5qf5uti67" path="res://scripts/UI/Window/ConnectWindowController.cs" id="1_h8q4r"]
+[ext_resource type="PackedScene" uid="uid://ditriwejf5hnl" path="res://scenes/ConnectionOption.tscn" id="2_670k4"]
+[ext_resource type="PackedScene" uid="uid://bv3mqdo51mmqm" path="res://scenes/BusyIndicator.tscn" id="3_lwopl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_670k4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_df8fl"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xcb45"]
+bg_color = Color(0.22352941, 0.22352941, 0.22352941, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="FontVariation" id="FontVariation_te6j0"]
+variation_embolden = 0.5
+
+[sub_resource type="LabelSettings" id="LabelSettings_xcb45"]
+font = SubResource("FontVariation_te6j0")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dthgr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_df8fl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_te6j0"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.105882354, 0.105882354, 0.105882354, 1)
+
+[node name="Popup_Connect" type="Window" unique_id=1416916780 node_paths=PackedStringArray("DialogConnectError", "ContainerPortList", "ButtonConnect", "BusyIndicator")]
+oversampling_override = 1.0
+title = "Connect to a PIMU device"
+initial_position = 2
+size = Vector2i(800, 300)
+exclusive = true
+keep_title_visible = true
+script = ExtResource("1_h8q4r")
+SceneConnectionOption = ExtResource("2_670k4")
+DialogConnectError = NodePath("Dialog_ConnectError")
+ContainerPortList = NodePath("Container_Root/Container_Contents/VBoxContainer/ScrollContainer/MarginContainer/Container_PortList")
+ButtonConnect = NodePath("Container_Root/Container_Contents/VBoxContainer/Container_Buttons/Button_Connect")
+BusyIndicator = NodePath("Container_Root/BusyIndicator")
+
+[node name="Dialog_ConnectError" type="AcceptDialog" parent="." unique_id=1137521764]
+oversampling_override = 1.0
+title = "Error!"
+initial_position = 2
+size = Vector2i(400, 200)
+dialog_autowrap = true
+
+[node name="Container_Root" type="PanelContainer" parent="." unique_id=1860863477]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_670k4")
+
+[node name="Container_Contents" type="PanelContainer" parent="Container_Root" unique_id=1248582330]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_df8fl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Container_Root/Container_Contents" unique_id=2036865114]
+layout_mode = 2
+
+[node name="Container_Titles" type="HBoxContainer" parent="Container_Root/Container_Contents/VBoxContainer" unique_id=199789339]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="Container_Title_Name" type="PanelContainer" parent="Container_Root/Container_Contents/VBoxContainer/Container_Titles" unique_id=845570252]
+custom_maximum_size = Vector2(200, -1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_xcb45")
+
+[node name="Label" type="Label" parent="Container_Root/Container_Contents/VBoxContainer/Container_Titles/Container_Title_Name" unique_id=1347806583]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Port"
+label_settings = SubResource("LabelSettings_xcb45")
+
+[node name="Container_Title_Description" type="PanelContainer" parent="Container_Root/Container_Contents/VBoxContainer/Container_Titles" unique_id=267276911]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_xcb45")
+
+[node name="Label" type="Label" parent="Container_Root/Container_Contents/VBoxContainer/Container_Titles/Container_Title_Description" unique_id=1883876407]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Description"
+label_settings = SubResource("LabelSettings_xcb45")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Container_Root/Container_Contents/VBoxContainer" unique_id=330518736]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_dthgr")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_df8fl")
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="PanelContainer" parent="Container_Root/Container_Contents/VBoxContainer/ScrollContainer" unique_id=1676451457]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_te6j0")
+
+[node name="Container_PortList" type="VBoxContainer" parent="Container_Root/Container_Contents/VBoxContainer/ScrollContainer/MarginContainer" unique_id=1233622531]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Container_Buttons" type="HBoxContainer" parent="Container_Root/Container_Contents/VBoxContainer" unique_id=576863800]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button_Refresh" type="Button" parent="Container_Root/Container_Contents/VBoxContainer/Container_Buttons" unique_id=906576504]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Refresh"
+
+[node name="Button_Connect" type="Button" parent="Container_Root/Container_Contents/VBoxContainer/Container_Buttons" unique_id=2113234670]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+disabled = true
+text = "Connect"
+
+[node name="BusyIndicator" parent="Container_Root" unique_id=332091192 instance=ExtResource("3_lwopl")]
+layout_mode = 2
+
+[connection signal="pressed" from="Container_Root/Container_Contents/VBoxContainer/Container_Buttons/Button_Refresh" to="." method="RefreshList"]
+[connection signal="pressed" from="Container_Root/Container_Contents/VBoxContainer/Container_Buttons/Button_Connect" to="." method="Connect"]

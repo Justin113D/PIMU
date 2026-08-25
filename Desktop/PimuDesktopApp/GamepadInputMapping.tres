@@ -1,0 +1,232 @@
+[gd_resource type="Resource" script_class="InputMapping" format=3 uid="uid://bjyphp2yc7c5b"]
+
+[ext_resource type="Script" uid="uid://h1r1243wctj1" path="res://scripts/Input/Config/InputMappingAction.cs" id="1_tvsjb"]
+[ext_resource type="Script" uid="uid://cnfxth0w2plde" path="res://scripts/Input/Config/InputMapping.cs" id="1_yt415"]
+[ext_resource type="Script" uid="uid://xib25m34jey2" path="res://scripts/Input/Config/InputMappingCategory.cs" id="2_e18s3"]
+
+[sub_resource type="Resource" id="Resource_tvsjb"]
+script = ExtResource("1_tvsjb")
+Label = "\"A\" Button"
+Action = &"Gamepad_A"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_e18s3"]
+script = ExtResource("1_tvsjb")
+Label = "\"B\" Button"
+Action = &"Gamepad_B"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_h1fgu"]
+script = ExtResource("1_tvsjb")
+Label = "\"X\" Button"
+Action = &"Gamepad_X"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_fp0j8"]
+script = ExtResource("1_tvsjb")
+Label = "\"Y\" Button"
+Action = &"Gamepad_Y"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_3j2ny"]
+script = ExtResource("2_e18s3")
+Label = "Right hand buttons"
+Actions = Array[Object]([SubResource("Resource_tvsjb"), SubResource("Resource_e18s3"), SubResource("Resource_h1fgu"), SubResource("Resource_fp0j8")])
+metadata/_custom_type_script = "uid://xib25m34jey2"
+
+[sub_resource type="Resource" id="Resource_slywp"]
+script = ExtResource("1_tvsjb")
+Label = "Up Button"
+Action = &"Gamepad_DPad_Up"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_54mh3"]
+script = ExtResource("1_tvsjb")
+Label = "Right Button"
+Action = &"Gamepad_DPad_Right"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_u0qsr"]
+script = ExtResource("1_tvsjb")
+Label = "Down Button"
+Action = &"Gamepad_DPad_Down"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_usclo"]
+script = ExtResource("1_tvsjb")
+Label = "Left Button"
+Action = &"Gamepad_DPad_Left"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_66pg1"]
+script = ExtResource("2_e18s3")
+Label = "Directional pad"
+Actions = Array[Object]([SubResource("Resource_slywp"), SubResource("Resource_54mh3"), SubResource("Resource_u0qsr"), SubResource("Resource_usclo")])
+metadata/_custom_type_script = "uid://xib25m34jey2"
+
+[sub_resource type="Resource" id="Resource_sn32p"]
+script = ExtResource("1_tvsjb")
+Label = "\"L\" Button"
+Action = &"Gamepad_L"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_ug88v"]
+script = ExtResource("1_tvsjb")
+Label = "\"ZL\" Button"
+Action = &"Gamepad_ZL"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_yuh4i"]
+script = ExtResource("1_tvsjb")
+Label = "\"GL\" Button"
+Action = &"Gamepad_GL"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_ci7t4"]
+script = ExtResource("1_tvsjb")
+Label = "\"R\" Button"
+Action = &"Gamepad_R"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_htfca"]
+script = ExtResource("1_tvsjb")
+Label = "\"ZR\" Button"
+Action = &"Gamepad_ZR"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_h2ilr"]
+script = ExtResource("1_tvsjb")
+Label = "\"GR\" Button"
+Action = &"Gamepad_GR"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_xmi4k"]
+script = ExtResource("2_e18s3")
+Label = "Shoulder buttons"
+Actions = Array[Object]([SubResource("Resource_sn32p"), SubResource("Resource_ug88v"), SubResource("Resource_yuh4i"), SubResource("Resource_ci7t4"), SubResource("Resource_htfca"), SubResource("Resource_h2ilr")])
+metadata/_custom_type_script = "uid://xib25m34jey2"
+
+[sub_resource type="Resource" id="Resource_tvwkt"]
+script = ExtResource("1_tvsjb")
+Label = "Plus Button"
+Action = &"Gamepad_Plus"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_66qmw"]
+script = ExtResource("1_tvsjb")
+Label = "Minus Button"
+Action = &"Gamepad_Minus"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_en4h4"]
+script = ExtResource("1_tvsjb")
+Label = "Home Button"
+Action = &"Gamepad_Home"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_novta"]
+script = ExtResource("1_tvsjb")
+Label = "Capture Button"
+Action = &"Gamepad_Capture"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_qf32e"]
+script = ExtResource("1_tvsjb")
+Label = "Chat Button"
+Action = &"Gamepad_Chat"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_dhcny"]
+script = ExtResource("2_e18s3")
+Label = "Menu buttons"
+Actions = Array[Object]([SubResource("Resource_tvwkt"), SubResource("Resource_66qmw"), SubResource("Resource_en4h4"), SubResource("Resource_novta"), SubResource("Resource_qf32e")])
+metadata/_custom_type_script = "uid://xib25m34jey2"
+
+[sub_resource type="Resource" id="Resource_1ok2k"]
+script = ExtResource("1_tvsjb")
+Label = "Press"
+Action = &"Gamepad_LeftStick_Press"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_f42f2"]
+script = ExtResource("1_tvsjb")
+Label = "Up"
+Action = &"Gamepad_LeftStick_Up"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_llu07"]
+script = ExtResource("1_tvsjb")
+Label = "Right"
+Action = &"Gamepad_LeftStick_Right"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_au64k"]
+script = ExtResource("1_tvsjb")
+Label = "Down"
+Action = &"Gamepad_LeftStick_Down"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_y3px1"]
+script = ExtResource("1_tvsjb")
+Label = "Left"
+Action = &"Gamepad_LeftStick_Left"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_1qpvm"]
+script = ExtResource("1_tvsjb")
+Label = "Reduce"
+Action = &"Gamepad_LeftStick_Reduce"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_i8mdg"]
+script = ExtResource("2_e18s3")
+Label = "Left stick"
+Actions = Array[Object]([SubResource("Resource_1ok2k"), SubResource("Resource_f42f2"), SubResource("Resource_llu07"), SubResource("Resource_au64k"), SubResource("Resource_y3px1"), SubResource("Resource_1qpvm")])
+metadata/_custom_type_script = "uid://xib25m34jey2"
+
+[sub_resource type="Resource" id="Resource_43q62"]
+script = ExtResource("1_tvsjb")
+Label = "Press"
+Action = &"Gamepad_RightStick_Press"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_2paco"]
+script = ExtResource("1_tvsjb")
+Label = "Up"
+Action = &"Gamepad_RightStick_Up"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_agfww"]
+script = ExtResource("1_tvsjb")
+Label = "Right"
+Action = &"Gamepad_RightStick_Right"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_lmwv3"]
+script = ExtResource("1_tvsjb")
+Label = "Down"
+Action = &"Gamepad_RightStick_Down"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_elcck"]
+script = ExtResource("1_tvsjb")
+Label = "Left"
+Action = &"Gamepad_RightStick_Left"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_at3sq"]
+script = ExtResource("1_tvsjb")
+Label = "Reduce"
+Action = &"Gamepad_RightStick_Reduce"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_qfngc"]
+script = ExtResource("2_e18s3")
+Label = "Right stick"
+Actions = Array[Object]([SubResource("Resource_43q62"), SubResource("Resource_2paco"), SubResource("Resource_agfww"), SubResource("Resource_lmwv3"), SubResource("Resource_elcck"), SubResource("Resource_at3sq")])
+metadata/_custom_type_script = "uid://xib25m34jey2"
+
+[resource]
+script = ExtResource("1_yt415")
+ActionCategories = Array[Object]([SubResource("Resource_3j2ny"), SubResource("Resource_66pg1"), SubResource("Resource_xmi4k"), SubResource("Resource_dhcny"), SubResource("Resource_i8mdg"), SubResource("Resource_qfngc")])
+metadata/_custom_type_script = "uid://cnfxth0w2plde"

@@ -1,0 +1,190 @@
+[gd_scene format=3 uid="uid://dy178ko3qewwc"]
+
+[ext_resource type="Texture2D" uid="uid://cwkqeaxft5xx5" path="res://sprites/GamepadIcon_Grip.png" id="1_0s4dp"]
+[ext_resource type="PackedScene" uid="uid://bv3mqdo51mmqm" path="res://scenes/BusyIndicator.tscn" id="1_44hiv"]
+[ext_resource type="Script" uid="uid://dqc5455ln5kqv" path="res://scripts/UI/Window/GamepadColorWindowController.cs" id="1_gl37j"]
+[ext_resource type="Shader" uid="uid://jdaog3h1wwfx" path="res://scripts/UI/GamepadIcon.gdshader" id="1_su5id"]
+[ext_resource type="Texture2D" uid="uid://bj6gi75bhf4yu" path="res://sprites/GamepadIcon_Highlight.png" id="2_su5id"]
+[ext_resource type="Texture2D" uid="uid://bra7ir8cwbbdw" path="res://sprites/GamepadIcon_Body.png" id="3_gl37j"]
+[ext_resource type="Texture2D" uid="uid://om1cm8gg41ve" path="res://sprites/GamepadIcon_Buttons.png" id="4_tg01n"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yk4sb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l4ebo"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0s4dp"]
+shader = ExtResource("1_su5id")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_su5id"]
+content_margin_left = 10.0
+content_margin_top = 7.5
+content_margin_right = 10.0
+content_margin_bottom = 7.5
+bg_color = Color(1, 1, 1, 1)
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 4
+shadow_color = Color(0, 0, 0, 0.005)
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[node name="GamepadColorWindow" type="Window" unique_id=1406119666 node_paths=PackedStringArray("ColorButtons", "IconTextures", "ColorPicker", "DialogSaved", "BusyIndicator")]
+oversampling_override = 1.0
+title = "Gamepad Color"
+initial_position = 2
+size = Vector2i(1160, 650)
+script = ExtResource("1_gl37j")
+ColorButtons = [NodePath("PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer/Button_Grip"), NodePath("PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer/Button_Highlight"), NodePath("PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer/Button_Body"), NodePath("PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer/Button_Buttons")]
+IconTextures = [NodePath("PanelContainer/Container_Contents/HBoxContainer/MarginContainer/AspectRatioContainer/TextureRect_Icon_Grip"), NodePath("PanelContainer/Container_Contents/HBoxContainer/MarginContainer/AspectRatioContainer/TextureRect_Icon_Highlight"), NodePath("PanelContainer/Container_Contents/HBoxContainer/MarginContainer/AspectRatioContainer/TextureRect_Icon_Body"), NodePath("PanelContainer/Container_Contents/HBoxContainer/MarginContainer/AspectRatioContainer/TextureRect_Icon_Buttons")]
+ColorPicker = NodePath("PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/ColorPicker")
+DialogSaved = NodePath("Dialog_Saved")
+BusyIndicator = NodePath("PanelContainer/BusyIndicator")
+
+[node name="Dialog_Saved" type="AcceptDialog" parent="." unique_id=1026525109]
+oversampling_override = 1.0
+title = "Saved"
+initial_position = 2
+size = Vector2i(500, 191)
+dialog_text = "The selected colors have been saved to the PIMU.
+
+You will have to disconnected, restart the PIMU, and connect again for some settings to take effect."
+dialog_autowrap = true
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=570202538]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_yk4sb")
+
+[node name="Container_Contents" type="PanelContainer" parent="PanelContainer" unique_id=2113509788]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_l4ebo")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Container_Contents" unique_id=164144034]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/Container_Contents/HBoxContainer" unique_id=1893377652]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 4
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="PanelContainer/Container_Contents/HBoxContainer/MarginContainer" unique_id=536204315]
+layout_mode = 2
+
+[node name="TextureRect_Icon_Grip" type="TextureRect" parent="PanelContainer/Container_Contents/HBoxContainer/MarginContainer/AspectRatioContainer" unique_id=580664210]
+modulate = Color(0.19607843, 0.19607843, 0.19607843, 1)
+material = SubResource("ShaderMaterial_0s4dp")
+layout_mode = 2
+texture = ExtResource("1_0s4dp")
+expand_mode = 1
+
+[node name="TextureRect_Icon_Highlight" type="TextureRect" parent="PanelContainer/Container_Contents/HBoxContainer/MarginContainer/AspectRatioContainer" unique_id=48796799]
+modulate = Color(0.9019608, 0.9019608, 0.9019608, 1)
+material = SubResource("ShaderMaterial_0s4dp")
+layout_mode = 2
+texture = ExtResource("2_su5id")
+expand_mode = 1
+
+[node name="TextureRect_Icon_Body" type="TextureRect" parent="PanelContainer/Container_Contents/HBoxContainer/MarginContainer/AspectRatioContainer" unique_id=172691077]
+modulate = Color(0.13725491, 0.13725491, 0.13725491, 1)
+layout_mode = 2
+texture = ExtResource("3_gl37j")
+expand_mode = 1
+
+[node name="TextureRect_Icon_Buttons" type="TextureRect" parent="PanelContainer/Container_Contents/HBoxContainer/MarginContainer/AspectRatioContainer" unique_id=360498141]
+modulate = Color(0.627451, 0.627451, 0.627451, 1)
+layout_mode = 2
+texture = ExtResource("4_tg01n")
+expand_mode = 1
+
+[node name="Button_Save" type="Button" parent="PanelContainer/Container_Contents/HBoxContainer/MarginContainer" unique_id=1622723015]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Save to PIMU"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Container_Contents/HBoxContainer" unique_id=1673810703]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer" unique_id=1776770911]
+layout_mode = 2
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 8
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer" unique_id=911412146]
+layout_mode = 2
+columns = 4
+
+[node name="Label_Grip" type="Label" parent="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer" unique_id=788189675]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Grip"
+
+[node name="Button_Grip" type="Button" parent="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer" unique_id=1913624710]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_su5id")
+
+[node name="Label_Highlight" type="Label" parent="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer" unique_id=1865633752]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Highlight"
+
+[node name="Button_Highlight" type="Button" parent="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer" unique_id=1099451740]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_su5id")
+
+[node name="Label_Body" type="Label" parent="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer" unique_id=693113520]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Body"
+
+[node name="Button_Body" type="Button" parent="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer" unique_id=735731895]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_su5id")
+
+[node name="Label_Buttons" type="Label" parent="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer" unique_id=1665654081]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Buttons"
+
+[node name="Button_Buttons" type="Button" parent="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer" unique_id=831011853]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_su5id")
+
+[node name="ColorPicker" type="ColorPicker" parent="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer" unique_id=1692702622]
+layout_mode = 2
+size_flags_vertical = 0
+edit_alpha = false
+edit_intensity = false
+sampler_visible = false
+presets_visible = false
+
+[node name="BusyIndicator" parent="PanelContainer" unique_id=332091192 instance=ExtResource("1_44hiv")]
+layout_mode = 2
+
+[connection signal="pressed" from="PanelContainer/Container_Contents/HBoxContainer/MarginContainer/Button_Save" to="." method="Save"]
+[connection signal="pressed" from="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer/Button_Grip" to="." method="SelectSlot" binds= [0]]
+[connection signal="pressed" from="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer/Button_Highlight" to="." method="SelectSlot" binds= [1]]
+[connection signal="pressed" from="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer/Button_Body" to="." method="SelectSlot" binds= [2]]
+[connection signal="pressed" from="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/MarginContainer/GridContainer/Button_Buttons" to="." method="SelectSlot" binds= [3]]
+[connection signal="color_changed" from="PanelContainer/Container_Contents/HBoxContainer/VBoxContainer/ColorPicker" to="." method="OnColorChanged"]

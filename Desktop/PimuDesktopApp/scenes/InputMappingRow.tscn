@@ -1,0 +1,160 @@
+[gd_scene format=3 uid="uid://b0gd52db0ar5c"]
+
+[ext_resource type="Texture2D" uid="uid://da1kieatkjmp2" path="res://sprites/Icons/Record.tres" id="1_iduag"]
+[ext_resource type="Script" uid="uid://devk3wnq2q031" path="res://scripts/UI/InputMappingController.cs" id="1_yn782"]
+[ext_resource type="Texture2D" uid="uid://c4j2101sjgxw7" path="res://sprites/Icons/KeyboardPhysical.tres" id="2_6yk74"]
+[ext_resource type="Texture2D" uid="uid://d2aoe2vmgixqu" path="res://sprites/Icons/Clear.tres" id="2_e2803"]
+[ext_resource type="Texture2D" uid="uid://ca366el4i51sp" path="res://sprites/Icons/Mouse.tres" id="3_5e3k1"]
+[ext_resource type="Texture2D" uid="uid://bcdkkggn43mt1" path="res://sprites/Icons/Recording.tres" id="3_mpklf"]
+[ext_resource type="Texture2D" uid="uid://blrnh31eob7v" path="res://sprites/Icons/Reload.tres" id="3_yn782"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v6m3g"]
+bg_color = Color(0.105882354, 0.105882354, 0.105882354, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mpklf"]
+bg_color = Color(0.2576, 0.2576, 0.2576, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.28175, 0.28175, 0.28175, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 4
+shadow_color = Color(0, 0, 0, 0.005)
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6yk74"]
+bg_color = Color(0.31555998, 0.31555998, 0.31555998, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.33971, 0.33971, 0.33971, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 4
+shadow_color = Color(0, 0, 0, 0.005)
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5e3k1"]
+bg_color = Color(0.30107, 0.30107, 0.30107, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.32522002, 0.32522002, 0.32522002, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 4
+shadow_color = Color(0, 0, 0, 0.005)
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npecy"]
+bg_color = Color(0.31555998, 0.31555998, 0.31555998, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.33971, 0.33971, 0.33971, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 4
+shadow_color = Color(0, 0, 0, 0.005)
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
+
+[node name="InputMappingRow" type="HBoxContainer" unique_id=815317638 node_paths=PackedStringArray("LabelMapping", "LabelInput", "TextureRectInputIcon", "ButtonRecord")]
+offset_right = 452.0
+offset_bottom = 35.0
+script = ExtResource("1_yn782")
+KeyboardIcon = ExtResource("2_6yk74")
+MouseIcon = ExtResource("3_5e3k1")
+RecordIcon = ExtResource("1_iduag")
+RecordingIcon = ExtResource("3_mpklf")
+LabelMapping = NodePath("Label_Mapping")
+LabelInput = NodePath("PanelContainer/HBoxContainer/Label_Input")
+TextureRectInputIcon = NodePath("PanelContainer/HBoxContainer/MarginContainer/TextureRect_InputIcon")
+ButtonRecord = NodePath("Button_Record")
+
+[node name="Label_Mapping" type="Label" parent="." unique_id=1941240245]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1125212570]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_v6m3g")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=679112438]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer" unique_id=281210946]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="TextureRect_InputIcon" type="TextureRect" parent="PanelContainer/HBoxContainer/MarginContainer" unique_id=2090984752]
+layout_mode = 2
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Label_Input" type="Label" parent="PanelContainer/HBoxContainer" unique_id=105213261]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 1
+
+[node name="Button_Record" type="Button" parent="." unique_id=1140913616]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+theme_override_constants/align_to_largest_stylebox = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_mpklf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6yk74")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5e3k1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_npecy")
+icon = ExtResource("1_iduag")
+icon_alignment = 1
+
+[node name="Button_Clear" type="Button" parent="." unique_id=905058362]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+theme_override_constants/align_to_largest_stylebox = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_mpklf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6yk74")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5e3k1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_npecy")
+icon = ExtResource("2_e2803")
+icon_alignment = 1
+
+[node name="Button_Reset" type="Button" parent="." unique_id=1602968859]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+theme_override_constants/align_to_largest_stylebox = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_mpklf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6yk74")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5e3k1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_npecy")
+icon = ExtResource("3_yn782")
+icon_alignment = 1
+
+[connection signal="pressed" from="Button_Record" to="." method="Record"]
+[connection signal="pressed" from="Button_Clear" to="." method="Clear"]
+[connection signal="pressed" from="Button_Reset" to="." method="Reset"]

@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.9.12112.369 stable
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pimu Desktop App", "Pimu Desktop App.csproj", "{8EB150C6-6712-42BD-9727-93F298958226}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PimuDesktopConnector", "..\PimuDesktopConnector\PimuDesktopConnector.csproj", "{7C819F81-366D-A6C7-2579-A790A24E6E30}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		ExportDebug|Any CPU = ExportDebug|Any CPU
+		ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8EB150C6-6712-42BD-9727-93F298958226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EB150C6-6712-42BD-9727-93F298958226}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EB150C6-6712-42BD-9727-93F298958226}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{8EB150C6-6712-42BD-9727-93F298958226}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{8EB150C6-6712-42BD-9727-93F298958226}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{8EB150C6-6712-42BD-9727-93F298958226}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{7C819F81-366D-A6C7-2579-A790A24E6E30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C819F81-366D-A6C7-2579-A790A24E6E30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C819F81-366D-A6C7-2579-A790A24E6E30}.ExportDebug|Any CPU.ActiveCfg = Release|Any CPU
+		{7C819F81-366D-A6C7-2579-A790A24E6E30}.ExportDebug|Any CPU.Build.0 = Release|Any CPU
+		{7C819F81-366D-A6C7-2579-A790A24E6E30}.ExportRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{7C819F81-366D-A6C7-2579-A790A24E6E30}.ExportRelease|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

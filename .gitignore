@@ -1,0 +1,16 @@
+# Godot 4+ specific ignores
+.godot/
+
+# Vscode
+.vscode/
+*.code-workspace
+
+# visual studio
+.vs/
+
+# cmake
+build/
+
+# c#
+bin/
+obj/

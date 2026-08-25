@@ -1,0 +1,127 @@
+[gd_scene format=3 uid="uid://cm0ysypxur4v4"]
+
+[ext_resource type="Script" uid="uid://b5xl7nek6lrma" path="res://scripts/UI/Window/InputMappingWindowController.cs" id="1_34acx"]
+[ext_resource type="Resource" uid="uid://bjyphp2yc7c5b" path="res://GamepadInputMapping.tres" id="2_q0p40"]
+[ext_resource type="PackedScene" uid="uid://b0gd52db0ar5c" path="res://scenes/InputMappingRow.tscn" id="3_fbxcv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vd5aa"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fbxcv"]
+content_margin_left = 24.0
+content_margin_top = 24.0
+content_margin_right = 24.0
+content_margin_bottom = 24.0
+bg_color = Color(0, 0, 0, 0.5019608)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3mno"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="InputMappingWindow" type="Window" unique_id=2068285387 node_paths=PackedStringArray("InputMappingContainer", "ControlRecordOverlay", "LabelRecordAction")]
+oversampling_override = 1.0
+title = "Input Mapping"
+initial_position = 2
+size = Vector2i(500, 600)
+exclusive = true
+script = ExtResource("1_34acx")
+InputMapping = ExtResource("2_q0p40")
+InputMappingContainer = NodePath("PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer")
+InputMappingRow = ExtResource("3_fbxcv")
+ControlRecordOverlay = NodePath("PanelContainer/Container_RecordingOverlay")
+LabelRecordAction = NodePath("PanelContainer/Container_RecordingOverlay/PanelContainer/VBoxContainer/Label_Action")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1011319442]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vd5aa")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=508636312]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=2037855462]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1650867900]
+layout_mode = 2
+
+[node name="Button_Copy" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=134584616]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Copy"
+
+[node name="Button_Paste" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1750153583]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Paste"
+
+[node name="Button_Reset" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=301359577]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Reset All"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1754404500]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer" unique_id=853185130]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Container_RecordingOverlay" type="PanelContainer" parent="PanelContainer" unique_id=1792115844]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fbxcv")
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/Container_RecordingOverlay" unique_id=93915365]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_y3mno")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Container_RecordingOverlay/PanelContainer" unique_id=1685429885]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label_Info" type="Label" parent="PanelContainer/Container_RecordingOverlay/PanelContainer/VBoxContainer" unique_id=782422632]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "Press the desired key or mouse button to map to the following action:"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Label_Action" type="Label" parent="PanelContainer/Container_RecordingOverlay/PanelContainer/VBoxContainer" unique_id=1891550303]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Label_Escape" type="Label" parent="PanelContainer/Container_RecordingOverlay/PanelContainer/VBoxContainer" unique_id=530143616]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "Alternatively, press escape to cancel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Button_Copy" to="." method="Copy"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Button_Paste" to="." method="Paste"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Button_Reset" to="." method="ResetAll"]

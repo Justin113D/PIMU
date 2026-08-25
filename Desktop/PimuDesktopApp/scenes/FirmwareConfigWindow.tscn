@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://cdxjss04jqn4s"]
+
+[ext_resource type="Script" uid="uid://bkrwahe56rhbb" path="res://scripts/UI/Window/FirmwareConfigWindowController.cs" id="1_1ynqf"]
+[ext_resource type="PackedScene" uid="uid://bv3mqdo51mmqm" path="res://scenes/BusyIndicator.tscn" id="1_u3pmr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1ynqf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u3pmr"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3mno"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.25882354, 0.25882354, 0.25882354, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="FirmwareConfigPopup" type="Window" unique_id=1389164367 node_paths=PackedStringArray("OptionButtonDebugMode", "CheckBoxDFBluetooth", "CheckBoxDFUSB", "CheckBoxDFConnector", "CheckBoxDFGamepad", "DialogSaved", "BusyIndicator")]
+oversampling_override = 1.0
+title = "PIMU Firmware Configuration"
+initial_position = 2
+size = Vector2i(400, 300)
+exclusive = true
+script = ExtResource("1_1ynqf")
+OptionButtonDebugMode = NodePath("PanelContainer/Container_Contents/VBoxContainer/Container_DebugMode/OptionButton_DebugMode")
+CheckBoxDFBluetooth = NodePath("PanelContainer/Container_Contents/VBoxContainer/Container_DebugFeatures/VBoxContainer/CheckBox_DF_Bluetooth")
+CheckBoxDFUSB = NodePath("PanelContainer/Container_Contents/VBoxContainer/Container_DebugFeatures/VBoxContainer/CheckBox_DF_USB")
+CheckBoxDFConnector = NodePath("PanelContainer/Container_Contents/VBoxContainer/Container_DebugFeatures/VBoxContainer/CheckBox_DF_Connector")
+CheckBoxDFGamepad = NodePath("PanelContainer/Container_Contents/VBoxContainer/Container_DebugFeatures/VBoxContainer/CheckBox_DF_Gamepad")
+DialogSaved = NodePath("Dialog_Saved")
+BusyIndicator = NodePath("PanelContainer/BusyIndicator")
+
+[node name="Dialog_Saved" type="AcceptDialog" parent="." unique_id=995540204]
+oversampling_override = 1.0
+title = "Saved"
+initial_position = 2
+size = Vector2i(500, 191)
+dialog_text = "The selected colors have been saved to the PIMU.
+
+You will have to disconnected, restart the PIMU, and connect again for some settings to take effect."
+dialog_autowrap = true
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1667495650]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_1ynqf")
+
+[node name="Container_Contents" type="PanelContainer" parent="PanelContainer" unique_id=1019276299]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u3pmr")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Container_Contents" unique_id=265043820]
+layout_mode = 2
+
+[node name="Container_DebugMode" type="HBoxContainer" parent="PanelContainer/Container_Contents/VBoxContainer" unique_id=1351243717]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/Container_Contents/VBoxContainer/Container_DebugMode" unique_id=3388718]
+layout_mode = 2
+text = "Debug Mode"
+
+[node name="OptionButton_DebugMode" type="OptionButton" parent="PanelContainer/Container_Contents/VBoxContainer/Container_DebugMode" unique_id=1950416425]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/Container_Contents/VBoxContainer" unique_id=2000647204]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "Debug Features"
+horizontal_alignment = 1
+
+[node name="Container_DebugFeatures" type="PanelContainer" parent="PanelContainer/Container_Contents/VBoxContainer" unique_id=643948636]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_y3mno")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Container_Contents/VBoxContainer/Container_DebugFeatures" unique_id=1488740856]
+layout_mode = 2
+
+[node name="CheckBox_DF_Bluetooth" type="CheckBox" parent="PanelContainer/Container_Contents/VBoxContainer/Container_DebugFeatures/VBoxContainer" unique_id=1400440456]
+layout_mode = 2
+text = "Bluetooth"
+
+[node name="CheckBox_DF_USB" type="CheckBox" parent="PanelContainer/Container_Contents/VBoxContainer/Container_DebugFeatures/VBoxContainer" unique_id=2025653295]
+layout_mode = 2
+text = "USB"
+
+[node name="CheckBox_DF_Connector" type="CheckBox" parent="PanelContainer/Container_Contents/VBoxContainer/Container_DebugFeatures/VBoxContainer" unique_id=1792926944]
+layout_mode = 2
+text = "Connector"
+
+[node name="CheckBox_DF_Gamepad" type="CheckBox" parent="PanelContainer/Container_Contents/VBoxContainer/Container_DebugFeatures/VBoxContainer" unique_id=928665126]
+layout_mode = 2
+text = "Gamepad"
+
+[node name="Gap" type="Control" parent="PanelContainer/Container_Contents/VBoxContainer" unique_id=483223229]
+custom_minimum_size = Vector2(0, 9)
+layout_mode = 2
+
+[node name="Button_Save" type="Button" parent="PanelContainer/Container_Contents/VBoxContainer" unique_id=937578113]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Save to PIMU device"
+
+[node name="BusyIndicator" parent="PanelContainer" unique_id=332091192 instance=ExtResource("1_u3pmr")]
+layout_mode = 2
+
+[connection signal="pressed" from="PanelContainer/Container_Contents/VBoxContainer/Button_Save" to="." method="Save"]

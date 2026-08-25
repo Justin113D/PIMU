@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://bv3mqdo51mmqm"]
+
+[ext_resource type="Script" uid="uid://30mpnwklsafu" path="res://scripts/UI/BusyIndicatorController.cs" id="1_7w154"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pdlq4"]
+bg_color = Color(0, 0, 0, 0.5019608)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7w154"]
+bg_color = Color(0.8089983, 0.8089983, 0.8089982, 0.5019608)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="BusyIndicator" type="PanelContainer" unique_id=332091192]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pdlq4")
+script = ExtResource("1_7w154")
+
+[node name="Container_BusyDots" type="HBoxContainer" parent="." unique_id=1022644421]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 32
+
+[node name="Panel_BusyDot1" type="Panel" parent="Container_BusyDots" unique_id=501549391]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7w154")
+
+[node name="Panel_BusyDot2" type="Panel" parent="Container_BusyDots" unique_id=733918669]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7w154")
+
+[node name="Panel_BusyDot3" type="Panel" parent="Container_BusyDots" unique_id=552697792]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7w154")

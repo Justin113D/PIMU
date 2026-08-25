@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://ditriwejf5hnl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dthgr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wvktn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e1x85"]
+
+[node name="ConnectionOption" type="PanelContainer" unique_id=1344142640]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 34.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SelectedConnection"
+theme_override_styles/panel = SubResource("StyleBoxEmpty_dthgr")
+
+[node name="Button" type="Button" parent="." unique_id=630169445]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wvktn")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_e1x85")
+toggle_mode = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1567765039]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label_Port" type="Label" parent="HBoxContainer" unique_id=1117453778]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(196, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Port"
+
+[node name="Label_Description" type="Label" parent="HBoxContainer" unique_id=919034072]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Description"
+autowrap_mode = 3
