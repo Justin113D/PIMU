@@ -135,9 +135,35 @@ typedef PACKED_STRUCT
 }
 PimuGamepadInputReport9;
 
+typedef struct
+{
+    uint32_t timestamp;
+    uint32_t timestamp_delta;
+    uint16_t temperature;
+    uint8_t mode;
+    uint8_t confidence_flags;
+    uint8_t quaternion_omitted_index;
+    uint32_t quaternion_1;
+    uint32_t quaternion_2;
+    uint32_t quaternion_3;
+    int16_t accel_x;
+    int16_t accel_y;
+    int16_t accel_z;
+    int16_t gyro_x;
+    int16_t gyro_y;
+    int16_t gyro_z;
+    int16_t unknown;
+} PimuGamepadIMUData;
+
+
 PG12BitVector2 pimu_gamepad_inputs_pack_vector(float x, float y);
+uint16_t pimu_gamepad_imu_data_get_ms_delta(PimuGamepadIMUData* imu_data);
 
 void pimu_gamepad_copy_inputs_5_to_9(PimuGamepadInputReport5* report_5, PimuGamepadInputReport9* report_9);
 void pimu_gamepad_copy_inputs_9_to_5(PimuGamepadInputReport9* report_9, PimuGamepadInputReport5* report_5);
+
+
+void pimu_gamepad_pack_5_imu_data(PimuGamepadInputReport5* report, PimuGamepadIMUData* imu_data);
+void pimu_gamepad_pack_9_imu_data(PimuGamepadInputReport9* report, PimuGamepadIMUData* imu_data);
 
 #endif

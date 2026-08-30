@@ -5,6 +5,8 @@ namespace J113D.Pimu.Desktop.App.Input
 {
 	public struct GamepadInputState
 	{
+		private const float HalfPi = float.Pi * 0.5f;
+
 		public GamepadButtons Buttons { get; set; }
 
 		public Vector2 StickLeft { get; set; }
@@ -16,20 +18,31 @@ namespace J113D.Pimu.Desktop.App.Input
 		public float Pitch
 		{
 			get;
-			set => field = float.Clamp(value, float.Pi * -0.5f, float.Pi * 0.5f);
+			set => field = float.Clamp(value, -HalfPi, HalfPi);
 		}
 
-		public float YawDelta
+		public float Yaw
 		{
 			get;
-			set => field = float.Clamp(value, -2000, 2000);
+			set
+			{
+				field = value;
+				if(field > float.Pi)
+				{
+					field -= float.Tau;
+				}
+				else if(field < float.Pi)
+				{
+					field += float.Tau;
+				}
+			}
 		}
 
 
 		public GamepadInputs ToInputs()
 		{
-			Vector3 accel = new Vector3(0, 0, 1).Rotated(new Vector3(1, 0, 0), Pitch);
-			
+			Quaternion quat = Basis.FromEuler(new(Pitch, 0, Yaw), EulerOrder.Xyz).GetRotationQuaternion();
+
 			return new()
 			{
 				Buttons = Buttons,
@@ -37,10 +50,10 @@ namespace J113D.Pimu.Desktop.App.Input
 				StickLeftY = StickLeft.Y,
 				StickRightX = StickRight.X,
 				StickRightY = StickRight.Y,
-				AccelX = accel.X,
-				AccelY = accel.Y,
-				AccelZ = accel.Z,
-				GyroZ = YawDelta
+				QuaternionW = quat.W,
+				QuaternionX = quat.X,
+				QuaternionY = quat.Y,
+				QuaternionZ = quat.Z,
 			};
 		}
 	}

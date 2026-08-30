@@ -1,5 +1,3 @@
-#pragma GCC optimize("O0")
-
 #include "config.h"
 
 #include <stdint.h>
@@ -9,8 +7,9 @@
 #include "pico/flash.h"
 #include "hardware/flash.h"
 
+#include "pimu_gamepad.h"
+
 #include "device.h"
-#include <pimu_gamepad.h>
 
 static const uint32_t pimu_header = 0x554D4950; // "PIMU"
 static const uint32_t pimu_current_version = 1;

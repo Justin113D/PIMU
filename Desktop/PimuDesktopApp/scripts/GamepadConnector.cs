@@ -42,6 +42,16 @@ namespace J113D.Pimu.Desktop.App
 		}
 
 
+		public override void _Notification(int what)
+		{
+			base._Notification(what);
+
+			if(what == NotificationWMCloseRequest)
+			{
+				_connector.Dispose();
+			}
+		}
+
 		public override async void _Process(double delta)
 		{
 			base._Process(delta);

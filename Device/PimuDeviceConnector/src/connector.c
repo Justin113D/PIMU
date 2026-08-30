@@ -82,7 +82,7 @@ PDC_CONNECTION_MODE pimu_device_connector_get_connection_mode(PimuDeviceConnecto
 
 void pimu_device_connector_disconnect(PimuDeviceConnector *connector)
 {
-    if (connector->connection_mode == PDC_CONNECTION_MODE_NONE)
+    if (connector->connection_mode == PDC_CONNECTION_MODE_NONE || connector->connection_mode == PDC_CONNECTION_MODE_DISABLED)
     {
         return;
     }
@@ -98,6 +98,30 @@ void pimu_device_connector_disconnect(PimuDeviceConnector *connector)
     }
 
     pdc_debug_print(connector, PDC_DEBUG_TYPE_INFO, "Disconnected");
+}
+
+void pimu_device_connector_set_disabled(PimuDeviceConnector *connector, bool disabled)
+{
+    if((connector->connection_mode == PDC_CONNECTION_MODE_DISABLED) == disabled)
+    {
+        return;
+    }
+
+    if(disabled)
+    {
+        if(connector->connection_mode != PDC_CONNECTION_MODE_NONE)
+        {
+            pimu_device_connector_disconnect(connector);
+        }
+
+        connector->connection_mode = PDC_CONNECTION_MODE_DISABLED;
+        pdc_debug_print(connector, PDC_DEBUG_TYPE_INFO, "Disabled");
+    }
+    else
+    {
+        connector->connection_mode = PDC_CONNECTION_MODE_NONE;
+        pdc_debug_print(connector, PDC_DEBUG_TYPE_INFO, "Enabled");
+    }
 }
 
 //--------------------------------------------------------------------+
@@ -156,6 +180,11 @@ void pimu_device_connector_set_gamepad_set_inputs_cb(PimuDeviceConnector *connec
     {                                                                                                                        \
         pdc_debug_print(connector, PDC_DEBUG_TYPE_ERROR, "Attempted to send a \"" source "\" message while not connected!"); \
         return;                                                                                                              \
+    }  \
+    else if (connector->connection_mode == PDC_CONNECTION_MODE_DISABLED) \
+    { \
+        pdc_debug_print(connector, PDC_DEBUG_TYPE_ERROR, "Attempted to send a \"" source "\" message while disabled!"); \
+        return; \
     }
 
 static void queue_message(PimuDeviceConnector *connector, PDCMessage *message)
@@ -246,7 +275,10 @@ static void handle_received_message(PimuDeviceConnector *connector)
     PDCMessage *message = &connector->read_buffer.deserialized_message;
     switch (message->header.destination)
     {
-
+    case PDC_MESSAGE_DESTINATION_DEVICE_DISCONNECT:
+        pdc_debug_print(connector, PDC_DEBUG_TYPE_INFO, "Received Disconnect request");
+        pimu_device_connector_disconnect(connector);
+        break;
     case PDC_MESSAGE_DESTINATION_DEVICE_FIRMWARE:
         switch (message->header.data_type)
         {
@@ -359,31 +391,60 @@ static void handle_handshake(PimuDeviceConnector *connector)
             .data = {0}};
 
         memcpy(message.data, connector->read_buffer.deserialized_message.data, message.header.data_size);
+
+        // Something is weird with the serial reader being used in the desktop app;
+        // It completely ignores the first batch of data coming in, so we just send 2 handshakes for good measure
+        queue_message(connector, &message);
         queue_message(connector, &message);
     }
 }
 
-void pimu_device_connector_read_byte(PimuDeviceConnector *connector, uint8_t value)
+bool pimu_device_connector_read_bytes(PimuDeviceConnector *connector, uint8_t* data, uint16_t size)
 {
-    if (pdc_read_buffer_deserialize_byte(&connector->read_buffer, value))
+    if(connector->connection_mode == PDC_CONNECTION_MODE_DISABLED)
     {
-        if (connector->connection_mode == PDC_CONNECTION_MODE_ESTABLISHED)
+        return false;
+    }
+
+    bool result = false;
+
+    for(int i = 0; i < size; i++)
+    {
+        if (pdc_read_buffer_deserialize_byte(&connector->read_buffer, data[i]))
         {
-            handle_received_message(connector);
-        }
-        else if (connector->read_buffer.deserialized_message.header.destination == PDC_MESSAGE_DESTINATION_DEVICE_HANDSHAKE)
-        {
-            handle_handshake(connector);
+            if (connector->connection_mode == PDC_CONNECTION_MODE_ESTABLISHED)
+            {
+                handle_received_message(connector);
+            }
+            else if (connector->read_buffer.deserialized_message.header.destination == PDC_MESSAGE_DESTINATION_DEVICE_HANDSHAKE)
+            {
+                handle_handshake(connector);
+            }
+    
+            result |= true;
         }
     }
+
+
+    return result;
 }
 
 void pimu_device_connector_poll(PimuDeviceConnector *connector)
 {
+    if(connector->connection_mode == PDC_CONNECTION_MODE_DISABLED)
+    {
+        return;
+    }
+
     pdc_send_buffer_poll(connector, &connector->send_buffer);
 }
 
 void pimu_device_connector_confirm_message_sent(PimuDeviceConnector *connector)
 {
+    if(connector->connection_mode == PDC_CONNECTION_MODE_DISABLED)
+    {
+        return;
+    }
+
     pdc_send_buffer_confirm_message_sent(&connector->send_buffer);
 }

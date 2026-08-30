@@ -128,12 +128,8 @@ namespace J113D.Pimu.Desktop.App.Input
 				}
 
 				state.PointerDelta = mouseMotion.Relative;
-				state.YawDelta = state.PointerDelta.Y * 100;
-
-				if (mouseMotion.Relative != Vector2.Zero)
-				{
-					state.Pitch += mouseMotion.Relative.Y * 0.002f;
-				}
+				//state.Pitch -= mouseMotion.Relative.Y * 0.01f;
+				state.Yaw -= mouseMotion.Relative.X * 0.01f;
 			}
 			else
 			{

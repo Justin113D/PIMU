@@ -2,7 +2,9 @@
 #define PPF_DEBUG_H_
 
 #include <stdarg.h>
-#include <pimu_device_connector.h>
+
+#include "pimu_device_connector.h"
+
 #include "config.h"
 
 void ppf_debug_init();

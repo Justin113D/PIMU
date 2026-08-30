@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://btyeeuprgmrpw" path="res://sprites/Gamepad_Mask.png" id="11_6nlc6"]
 [ext_resource type="Script" uid="uid://c34np85sbh3vi" path="res://scripts/UI/GamepadCaptureMask.cs" id="12_hrwcu"]
 [ext_resource type="PackedScene" uid="uid://b26267roexyuc" path="res://scenes/ConnectWindow.tscn" id="13_hrwcu"]
+[ext_resource type="PackedScene" uid="uid://syt37qxhnxws" path="res://Gamepad.glb" id="18_eqcks"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wvktn"]
 content_margin_left = 5.0
@@ -36,13 +37,20 @@ corner_radius_bottom_left = 4
 bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_x1kpl"]
-viewport_path = NodePath("VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask")
+viewport_path = NodePath("VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cm0pq"]
 resource_local_to_scene = true
 shader = ExtResource("8_xp1au")
 shader_parameter/mask_texture = SubResource("ViewportTexture_x1kpl")
 shader_parameter/active_texture = ExtResource("9_tpsoq")
+
+[sub_resource type="Environment" id="Environment_df8fl"]
+background_mode = 1
+background_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.641934, 0.641934, 0.641934, 1)
+reflected_light_source = 1
 
 [node name="App" type="PanelContainer" unique_id=2086801130 node_paths=PackedStringArray("DisplayController", "InputHandler", "MenuPimuDevice", "ConnectWindow", "FirmwareConfigWindow", "GamepadColorWindow", "InputMappingWindow", "LabelConnectStatus", "DialogDisconnected")]
 texture_filter = 4
@@ -136,7 +144,7 @@ theme_override_constants/margin_right = 10
 layout_mode = 2
 text = "Not Connected"
 
-[node name="Container_GamepadDisplay" type="PanelContainer" parent="VBoxContainer" unique_id=285667944 node_paths=PackedStringArray("Outline", "LeftStick", "RightStick")]
+[node name="Container_GamepadDisplay" type="PanelContainer" parent="VBoxContainer" unique_id=285667944 node_paths=PackedStringArray("Outline", "LeftStick", "RightStick", "GamepadModel")]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_1y06d")
@@ -144,6 +152,7 @@ script = ExtResource("2_t48kk")
 Outline = NodePath("AspectRatioContainer/Outline")
 LeftStick = NodePath("AspectRatioContainer/Joysticks/LeftStick")
 RightStick = NodePath("AspectRatioContainer/Joysticks/RightStick")
+GamepadModel = NodePath("AspectRatioContainer/Container_Rotation/SubViewportContainer/SubViewport/Node3D/Gamepad")
 LeftStickDefault = ExtResource("3_edkpo")
 LeftStickActive = ExtResource("4_kdca3")
 RightStickDefault = ExtResource("5_rwp8v")
@@ -154,18 +163,18 @@ CapturingColor = Color(0.12156863, 1, 0.29411766, 1)
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="VBoxContainer/Container_GamepadDisplay" unique_id=992956486]
 layout_mode = 2
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer" unique_id=1239122880]
+[node name="SubViewportContainer_Mask" type="SubViewportContainer" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer" unique_id=1239122880]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 stretch = true
 
-[node name="ButtonMask" type="SubViewport" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer" unique_id=55563899]
+[node name="ButtonMask" type="SubViewport" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask" unique_id=55563899]
 handle_input_locally = false
 size = Vector2i(1027, 1027)
 render_target_clear_mode = 1
 render_target_update_mode = 4
 
-[node name="Panel" type="Panel" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask" unique_id=58460807]
+[node name="Panel" type="Panel" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask" unique_id=58460807]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -173,7 +182,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_3dxm6")
 
-[node name="Mask_A" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=1775940475]
+[node name="Mask_A" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=1775940475]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -188,7 +197,7 @@ offset_right = 12.337952
 offset_bottom = -0.22003174
 rotation = -0.7853982
 
-[node name="Mask_B" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=390774946]
+[node name="Mask_B" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=390774946]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -203,7 +212,7 @@ offset_right = -0.16204834
 offset_bottom = -0.22003174
 rotation = 0.7853982
 
-[node name="Mask_X" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=1830764627]
+[node name="Mask_X" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=1830764627]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -218,7 +227,7 @@ offset_right = -0.16204834
 offset_bottom = -0.22003174
 rotation = -2.3561945
 
-[node name="Mask_Y" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=1613611462]
+[node name="Mask_Y" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=1613611462]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -233,7 +242,7 @@ offset_right = -10.662048
 offset_bottom = -0.22003174
 rotation = 2.3561945
 
-[node name="Mask_DPadUp" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=1884785794]
+[node name="Mask_DPadUp" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=1884785794]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -248,7 +257,7 @@ offset_right = 0.24917603
 offset_bottom = 0.4091797
 rotation = 3.926991
 
-[node name="Mask_DPadRight" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=449013020]
+[node name="Mask_DPadRight" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=449013020]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -263,7 +272,7 @@ offset_right = 0.24917603
 offset_bottom = 0.4091797
 rotation = 5.4977875
 
-[node name="Mask_DPadDown" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=186611554]
+[node name="Mask_DPadDown" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=186611554]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -278,7 +287,7 @@ offset_right = 0.24917603
 offset_bottom = 0.4091797
 rotation = 0.7853982
 
-[node name="Mask_DPadLeft" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=2117001993]
+[node name="Mask_DPadLeft" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=2117001993]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -293,7 +302,7 @@ offset_right = 0.24917603
 offset_bottom = 0.4091797
 rotation = 2.3561945
 
-[node name="Mask_GL" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=1116248353]
+[node name="Mask_GL" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=1116248353]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -308,7 +317,7 @@ offset_right = -0.07583618
 offset_bottom = 0.42529297
 rotation = 0.7853982
 
-[node name="Mask_GR" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=1541296202]
+[node name="Mask_GR" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=1541296202]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -323,7 +332,7 @@ offset_right = -0.13330078
 offset_bottom = -0.0030517578
 rotation = 0.7853982
 
-[node name="Mask_Plus" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=423762056]
+[node name="Mask_Plus" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=423762056]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -337,7 +346,7 @@ offset_top = 0.24996948
 offset_right = -0.2999878
 offset_bottom = -0.28805542
 
-[node name="Mask_Minus" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=1619357077]
+[node name="Mask_Minus" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=1619357077]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -351,7 +360,7 @@ offset_top = 0.24996948
 offset_right = 0.15997314
 offset_bottom = 0.099975586
 
-[node name="Mask_Home" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=981431295]
+[node name="Mask_Home" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=981431295]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -365,7 +374,7 @@ offset_top = 0.099975586
 offset_right = -0.19000244
 offset_bottom = -0.24401855
 
-[node name="Mask_Capture" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=433990844]
+[node name="Mask_Capture" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=433990844]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -379,7 +388,7 @@ offset_top = 0.08999634
 offset_right = 0.2539673
 offset_bottom = -0.23400879
 
-[node name="Mask_Chat" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=52076730]
+[node name="Mask_Chat" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=52076730]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -393,7 +402,7 @@ offset_top = -0.44000244
 offset_right = 0.27807617
 offset_bottom = 0.25
 
-[node name="Mask_Bluetooth" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=458467127]
+[node name="Mask_Bluetooth" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=458467127]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -407,7 +416,7 @@ offset_top = -0.28399658
 offset_right = -0.3000183
 offset_bottom = 0.4920044
 
-[node name="Mask_PlayerLED1" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=2131956311]
+[node name="Mask_PlayerLED1" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=2131956311]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -421,7 +430,7 @@ offset_top = -0.22201538
 offset_right = -0.08203125
 offset_bottom = -0.072006226
 
-[node name="Mask_PlayerLED2" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=1368328620]
+[node name="Mask_PlayerLED2" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=1368328620]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -435,7 +444,7 @@ offset_top = -0.22201538
 offset_right = 0.033996582
 offset_bottom = -0.072006226
 
-[node name="Mask_PlayerLED3" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=162195439]
+[node name="Mask_PlayerLED3" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=162195439]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -449,7 +458,7 @@ offset_top = -0.22201538
 offset_right = 0.14996338
 offset_bottom = -0.072006226
 
-[node name="Mask_PlayerLED4" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=2090800666]
+[node name="Mask_PlayerLED4" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=2090800666]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -463,7 +472,7 @@ offset_top = -0.22201538
 offset_right = 0.2659912
 offset_bottom = -0.072006226
 
-[node name="Mask_BatteryLED" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=229266915]
+[node name="Mask_BatteryLED" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=229266915]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -477,7 +486,7 @@ offset_top = 0.5119934
 offset_right = 0.10998535
 offset_bottom = -0.37200928
 
-[node name="Mask_ZR" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=413520299]
+[node name="Mask_ZR" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=413520299]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -492,7 +501,7 @@ offset_right = -0.041992188
 offset_bottom = -0.42388916
 rotation = 0.11868239
 
-[node name="Mask_ZL" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=1638880999]
+[node name="Mask_ZL" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=1638880999]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -507,7 +516,7 @@ offset_right = 0.1539917
 offset_bottom = -0.30789185
 rotation = -0.10471976
 
-[node name="Mask_L" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=1672384893]
+[node name="Mask_L" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=1672384893]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -522,7 +531,7 @@ offset_right = -0.12399292
 offset_bottom = 0.51397705
 rotation = -0.099483766
 
-[node name="Mask_R" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer/ButtonMask/Panel" unique_id=1851050978]
+[node name="Mask_R" type="ColorRect" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask/ButtonMask/Panel" unique_id=1851050978]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -591,6 +600,51 @@ mouse_filter = 0
 texture = ExtResource("11_6nlc6")
 expand_mode = 1
 script = ExtResource("12_hrwcu")
+
+[node name="Container_Rotation" type="Control" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer" unique_id=1257836852]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/Container_Rotation" unique_id=544889303]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -112.0
+offset_top = -246.0
+offset_right = 134.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/Container_Rotation/SubViewportContainer" unique_id=636569579]
+transparent_bg = true
+handle_input_locally = false
+msaa_3d = 2
+size = Vector2i(246, 246)
+render_target_update_mode = 4
+
+[node name="Node3D" type="Node3D" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/Container_Rotation/SubViewportContainer/SubViewport" unique_id=1443898358]
+transform = Transform3D(1, 0, 0, 0, 0.68961954, 0.7241718, 0, -0.7241718, 0.68961954, 0, 0, 0)
+
+[node name="Gamepad" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/Container_Rotation/SubViewportContainer/SubViewport/Node3D" unique_id=386662459 instance=ExtResource("18_eqcks")]
+
+[node name="Camera3D" type="Camera3D" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/Container_Rotation/SubViewportContainer/SubViewport" unique_id=892467130]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 2.4498591, 0)
+projection = 1
+size = 2.5
+far = 10.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/Container_Rotation/SubViewportContainer/SubViewport" unique_id=1878135017]
+environment = SubResource("Environment_df8fl")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="VBoxContainer/Container_GamepadDisplay/AspectRatioContainer/Container_Rotation/SubViewportContainer/SubViewport" unique_id=304091608]
+transform = Transform3D(0.9063079, 0.38302222, 0.17860624, 0, -0.42261833, 0.9063079, 0.42261833, -0.8213937, -0.38302234, 0, 0, 0)
+light_energy = 1.5
+sky_mode = 1
 
 [connection signal="GamepadStateChanged" from="InputHandler" to="VBoxContainer/Container_GamepadDisplay" method="OnGamepadStateChanged"]
 [connection signal="id_pressed" from="VBoxContainer/Container_ToolBar/MenuBar/PIMU Device" to="." method="OnPimuMenuIDPressed"]

@@ -1,5 +1,3 @@
-#pragma GCC optimize("O0")
-
 #include "send_buffer.h"
 
 #include "connector.h"

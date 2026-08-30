@@ -36,6 +36,9 @@ namespace J113D.Pimu.Desktop.App.UI
 		[Export]
 		private TextureRect? RightStick { get; set; }
 
+		[Export]
+		private Node3D? GamepadModel { get; set; }
+
 
 		[ExportCategory("Display properties")]
 		[Export]
@@ -124,6 +127,8 @@ namespace J113D.Pimu.Desktop.App.UI
 			}
 
 			Outline!.OffsetTransformPositionRatio = outlineOffset * 0.002f;
+
+			GamepadModel!.Quaternion = Basis.FromEuler(new(state.Pitch, state.Yaw, 0), EulerOrder.Xyz).GetRotationQuaternion();
 		}
 
 		private void SetOutlineMode(OutlineMode outlineMode)

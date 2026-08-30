@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#include <pimu_device_connector.h>
+#include "pimu_device_connector.h"
 
 void ppf_config_load(void);
 void ppf_config_queue_save(void);

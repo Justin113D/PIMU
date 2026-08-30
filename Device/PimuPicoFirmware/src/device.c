@@ -4,10 +4,11 @@
 #include "tusb.h"
 #include "bsp/board.h"
 
-#include <pimu_gamepad_input.h>
+#include "pimu_gamepad_input.h"
 
 #include "debug.h"
-#include "interfaces.h"
+#include "interface/itf_gamepad.h"
+#include "interface/itf_input.h"
 
 //--------------------------------------------------------------------+
 // General USB callbacks
@@ -135,9 +136,11 @@ void hid_poll(void)
         return;
     }
 
+    ppf_itf_input_update();
+    
     if (tud_hid_ready() && pimu_gamepad_get_usb_enabled(ppf_gamepad) && pimu_gamepad_get_feature_mask(ppf_gamepad))
     {
-        switch (5)//pimu_gamepad_get_report_id(ppf_gamepad)) // always send 5 for now
+        switch (pimu_gamepad_get_report_id(ppf_gamepad))
         {
         case 9:
             tud_hid_report(9, (uint8_t *)&ppf_gamepad_input_report_9, sizeof(ppf_gamepad_input_report_9));
@@ -148,7 +151,6 @@ void hid_poll(void)
         }
     }
 
-    ppf_interfaces_update_inputs();
     next_report_timestamp = delayed_by_us(get_absolute_time(), polling_rate);
     ppf_gamepad_input_report_5.counter++;
     ppf_gamepad_input_report_9.counter++;

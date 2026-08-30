@@ -86,10 +86,10 @@ typedef PACKED_STRUCT
     float stick_left_y;
     float stick_right_x;
     float stick_right_y;
-    float accel_x;
-    float accel_y;
-    float accel_z;
-    float gyro_z;
+    float quaternion_w;
+    float quaternion_x;
+    float quaternion_y;
+    float quaternion_z;
 } PimuDeviceConnectorGamepadInputs;
 
 //--------------------------------------------------------------------+
@@ -108,7 +108,8 @@ typedef enum
 {
     PDC_CONNECTION_MODE_NONE,
     PDC_CONNECTION_MODE_HANDSHAKING,
-    PDC_CONNECTION_MODE_ESTABLISHED
+    PDC_CONNECTION_MODE_ESTABLISHED,
+    PDC_CONNECTION_MODE_DISABLED
 } PDC_CONNECTION_MODE;
 
 PDC_CONNECTION_MODE pimu_device_connector_get_connection_mode(PimuDeviceConnector *connector);
@@ -119,6 +120,8 @@ void pimu_device_connector_set_connected_cb(PimuDeviceConnector *connector, PDCC
 
 typedef void (*PDCDisconnected)(PimuDeviceConnector* source);
 void pimu_device_connector_set_disconnected_cb(PimuDeviceConnector *connector, PDCDisconnected callback);
+
+void pimu_device_connector_set_disabled(PimuDeviceConnector *connector, bool disabled);
 
 //--------------------------------------------------------------------+
 
@@ -168,7 +171,7 @@ void pimu_device_connector_set_gamepad_set_inputs_cb(PimuDeviceConnector* connec
 
 //--------------------------------------------------------------------+
 
-void pimu_device_connector_read_byte(PimuDeviceConnector *connector, uint8_t value);
+bool pimu_device_connector_read_bytes(PimuDeviceConnector *connector, uint8_t* data, uint16_t size);
 void pimu_device_connector_poll(PimuDeviceConnector *connector);
 void pimu_device_connector_confirm_message_sent(PimuDeviceConnector *connector);
 

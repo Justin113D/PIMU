@@ -64,7 +64,7 @@ namespace J113D.Pimu.Desktop.Connector.Internal
 				return true;
 			}
 
-			public Message[] Deserialize(int length)
+			public Message[]? Deserialize(int length)
 			{
 				List<Message> messages = [];
 
@@ -99,6 +99,10 @@ namespace J113D.Pimu.Desktop.Connector.Internal
 
 				}
 
+				if(messages.Count == 0)
+				{
+					return null;
+				}
 
 				return [.. messages];
 			}

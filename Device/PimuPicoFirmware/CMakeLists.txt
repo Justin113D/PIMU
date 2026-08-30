@@ -42,11 +42,17 @@ add_executable(pimu
     src/wireless/rfcomm.c
     src/wireless/hci.c
     src/wireless/hci_debug.c
+
+    src/interface/itf_bluetooth.c
+    src/interface/itf_uart.c
+    src/interface/itf_connector.c
+    src/interface/itf_input.c
+    src/interface/itf_imu.c
+    src/interface/itf_gamepad.c
     
     src/debug.c
     src/config.c
     src/pico_utils.c
-    src/interfaces.c
     src/device.c
     src/main.c
 )

@@ -10,7 +10,8 @@
 #include "config.h"
 #include "debug.h"
 #include "device.h"
-#include "interfaces.h"
+#include "interface/itf_bluetooth.h"
+#include "interface/itf_gamepad.h"
 
 #include "rfcomm.h"
 #include "bluetooth.h"

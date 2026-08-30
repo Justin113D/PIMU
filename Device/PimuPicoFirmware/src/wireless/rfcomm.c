@@ -8,7 +8,8 @@
 
 #include "debug.h"
 #include "bluetooth.h"
-#include "interfaces.h"
+#include "interface/itf_connector.h"
+#include "interface/itf_bluetooth.h"
 #include "hci_debug.h"
 
 #define RFCOMM_SERVER_CHANNEL 1
@@ -54,10 +55,7 @@ static void handle_packet(uint8_t packet_type, uint16_t channel, uint8_t *packet
         }
 
     case RFCOMM_DATA_PACKET:
-        for (int i = 0; i < size; i++)
-        {
-            pimu_device_connector_read_byte(ppf_device_connector_bluetooth, packet[i]);
-        }
+        ppf_itf_connector_read_bytes(PPF_CONNECTOR_TYPE_BLUETOOTH, packet, size);
         break;
     }
 }

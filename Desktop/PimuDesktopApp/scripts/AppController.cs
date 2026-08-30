@@ -41,6 +41,8 @@ namespace J113D.Pimu.Desktop.App
 		private AcceptDialog? DialogDisconnected { get; set; }
 
 
+
+
 		public override void _EnterTree()
 		{
 			base._EnterTree();

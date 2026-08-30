@@ -6,7 +6,7 @@
 #include "pico/stdlib.h"
 #include "pico/sync.h"
 
-#include "interfaces.h"
+#include "interface/itf_connector.h"
 
 #define DEBUG_UART uart1
 #define DEBUG_BAUDRATE 115200
@@ -65,10 +65,9 @@ void ppf_debug_printf_list(uint8_t features, const char *type, const char *forma
     
     uart_write_blocking(DEBUG_UART, debug_message, debug_message_size);
 
-    if((features & PDC_FIRMWARE_CONFIG_DEBUG_FEATURE_BLUETOOTH) == 0 
-        && ppf_config_get_debug_mode() == PDC_FIRMWARE_CONFIG_DEBUG_MODE_CONNECTOR)
+    if(ppf_config_get_debug_mode() == PDC_FIRMWARE_CONFIG_DEBUG_MODE_CONNECTOR)
     {
-        ppf_interfaces_send_debug_string(features, debug_message);
+        ppf_itf_connector_send_debug_string(features, debug_message);
     }
 
     mutex_exit(&debug_mutex);

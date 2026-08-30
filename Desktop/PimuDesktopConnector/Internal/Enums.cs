@@ -5,8 +5,9 @@
 		None = 0,
 
 		DeviceHandshake = 1,
-		DeviceFirmware = 2,
-		DeviceGamepad = 3,
+		DeviceDisconnect = 2,
+		DeviceFirmware = 3,
+		DeviceGamepad = 4,
 
 		DesktopHandshake = 0x81,
 		DesktopDebug = 0x82,

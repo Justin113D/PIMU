@@ -18,9 +18,6 @@ namespace J113D.Pimu.Desktop.Connector
 
 		private readonly MessageSerializer.DeserializeBuffer _readBuffer;
 
-		private bool _connectionEstablished = false;
-		private Message? _receivedHandshake = null;
-
 		public event ReceivedDebugEventHandler? ReceivedDebug;
 		public event ReceivedFirmwareCurrentConfigEventHandler? ReceivedFirmwareCurrentConfig;
 		public event ReceivedGamepadCurrentColorsEventHandler? ReceivedGamepadCurrentColors;
@@ -32,6 +29,7 @@ namespace J113D.Pimu.Desktop.Connector
 		{
 			Port = port;
 			_messageStream = messageStream;
+			_messageStream.BaudRate = 115200;
 			_readBuffer = new();
 		}
 
@@ -89,7 +87,6 @@ namespace J113D.Pimu.Desktop.Connector
 				}
 
 				connector = new(port, stream);
-				_ = Task.Run(connector.ReadAsync);
 
 				byte[] check = RandomNumberGenerator.GetBytes(16);
 
@@ -103,34 +100,46 @@ namespace J113D.Pimu.Desktop.Connector
 				byte[] handshakeSerialSequence = MessageSerializer.Serialize(handshake);
 
 				const int handshakeAttempts = 5;
-				const int handshakeWaitMilliseconds = 1000;
+				const long handshakeWaitTicks = TimeSpan.TicksPerSecond * 5;
+				Message receivedHandshake = default;
+
 				for (int i = 0; i < handshakeAttempts; i++)
 				{
 					await stream.WriteAsync(handshakeSerialSequence);
-					await Task.Delay(handshakeWaitMilliseconds);
 
-					if (connector._receivedHandshake == null)
+					long end = DateTime.UtcNow.Ticks + handshakeWaitTicks;
+					while (DateTime.UtcNow.Ticks < end)
+					{
+						if(!connector._messageStream.CanRead)
+						{
+							continue;
+						}
+
+						Message[]? receivedMessages = await connector.ReadAsync();
+						receivedHandshake = receivedMessages?.FirstOrDefault(x => x.Destination == MessageDestination.DesktopHandshake) ?? default;
+						if(receivedHandshake.Destination != default)
+						{
+							Console.WriteLine("Received handshake");
+							break;
+						}
+
+					}
+
+					if (receivedHandshake.Destination == default
+						|| !receivedHandshake.Data.SequenceEqual(check))
 					{
 						continue;
 					}
 
-					Message received = connector._receivedHandshake.Value;
-					connector._receivedHandshake = null;
-
-					if(!received.Data.SequenceEqual(check))
-					{
-						continue;
-					}
-
-					if(received.DataType != handshake.DataType)
+					if(receivedHandshake.DataType != handshake.DataType)
 					{
 						connector.Dispose();
 						return (ConnectionResult.VersionMismatch, null);
 					}
 					else
 					{
-						connector._connectionEstablished = true;
 						// confirming the connection
+						_ = Task.Run(connector.ReadAsyncTask);
 						await connector.SendMessage(new(MessageDestination.DeviceHandshake, 0, []));
 						return (ConnectionResult.Success, connector);
 					}
@@ -148,27 +157,31 @@ namespace J113D.Pimu.Desktop.Connector
 		}
 
 
-		private async Task ReadAsync()
+		private async Task ReadAsyncTask()
 		{
 			while (_messageStream.CanRead)
 			{
-				int bytesRead = await _messageStream.ReadAsync(_readBuffer.SerialBuffer);
-				Message[] receivedMessages = _readBuffer.Deserialize(bytesRead);
-
-				foreach (Message receivedMessage in receivedMessages)
+				Message[]? receivedMessages = await ReadAsync();
+				if(receivedMessages != null)
 				{
-					if (_connectionEstablished)
+					foreach (Message receivedMessage in receivedMessages)
 					{
 						HandleReceivedMessage(receivedMessage);
-					}
-					else if (receivedMessage.Destination == MessageDestination.DesktopHandshake)
-					{
-						_receivedHandshake = receivedMessage;
 					}
 				}
 			}
 
 			Disconnected?.Invoke(Port, new());
+		}
+
+		private async Task<Message[]?> ReadAsync()
+		{
+			int bytesRead = await _messageStream.ReadAsync(_readBuffer.SerialBuffer);
+			if(bytesRead > 0)
+			{
+				Console.WriteLine(bytesRead);
+			}
+			return _readBuffer.Deserialize(bytesRead);
 		}
 
 		private void HandleReceivedMessage(Message message)
@@ -273,7 +286,6 @@ namespace J113D.Pimu.Desktop.Connector
 			));
 		}
 
-
 		#region Boilerplate dispose code
 
 		private bool _disposedValue;
@@ -284,6 +296,11 @@ namespace J113D.Pimu.Desktop.Connector
 			{
 				if (disposing)
 				{
+					if(_messageStream.CanWrite)
+					{
+						_messageStream.Write(MessageSerializer.Serialize(new(MessageDestination.DeviceDisconnect, 0, [])));
+					}
+
 					_messageStream.Dispose();
 				}
 
