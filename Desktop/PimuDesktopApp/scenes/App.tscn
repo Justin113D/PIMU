@@ -26,6 +26,13 @@ content_margin_right = 5.0
 content_margin_bottom = 5.0
 bg_color = Color(0.078431375, 0.078431375, 0.078431375, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3mno"]
+bg_color = Color(11.708403, 11.708403, 11.708403, 0.08235294)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1y06d"]
 bg_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
 corner_radius_top_left = 4
@@ -93,8 +100,9 @@ initial_position = 2
 size = Vector2i(400, 120)
 dialog_text = "Disconnected from the PIMU device"
 
-[node name="InputHandler" type="Node" parent="." unique_id=734102643]
+[node name="InputHandler" type="Node" parent="." unique_id=734102643 node_paths=PackedStringArray("CheckButtonRightStickUp")]
 script = ExtResource("3_1y06d")
+CheckButtonRightStickUp = NodePath("../VBoxContainer/Container_ToolBar/PanelContainer/CheckButton_RightStickUp")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2009461299]
 layout_mode = 2
@@ -135,6 +143,14 @@ item_0/id = 0
 [node name="Gap" type="Control" parent="VBoxContainer/Container_ToolBar" unique_id=71521732]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/Container_ToolBar" unique_id=115793502]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_y3mno")
+
+[node name="CheckButton_RightStickUp" type="CheckButton" parent="VBoxContainer/Container_ToolBar/PanelContainer" unique_id=1977509809]
+layout_mode = 2
+text = "Right Stick Up"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Container_ToolBar" unique_id=268047921]
 layout_mode = 2

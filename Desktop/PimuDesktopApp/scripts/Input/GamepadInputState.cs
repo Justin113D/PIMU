@@ -16,6 +16,8 @@ namespace J113D.Pimu.Desktop.App.Input
 
 		public Vector2 PointerDelta { get; set; }
 
+		public bool ForceRightStickUp { get; set; }
+
 		public float Pitch
 		{
 			get;
@@ -50,8 +52,8 @@ namespace J113D.Pimu.Desktop.App.Input
 				Buttons = Buttons,
 				StickLeftX = StickLeft.X,
 				StickLeftY = StickLeft.Y,
-				StickRightX = StickRight.X,
-				StickRightY = StickRight.Y,
+				StickRightX = ForceRightStickUp ? 0 : StickRight.X,
+				StickRightY = ForceRightStickUp ? 1 : StickRight.Y,
 				QuaternionW = quat.W,
 				QuaternionX = quat.X,
 				QuaternionY = quat.Y,

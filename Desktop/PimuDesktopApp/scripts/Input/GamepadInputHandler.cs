@@ -24,6 +24,7 @@ namespace J113D.Pimu.Desktop.App.Input
 			HandledChanged
 		}
 
+		private static StringName HotkeyToggleRightStickUp = "Hotkey_ToggleRightStickUp";
 
 		private static (StringName action, GamepadButtons button)[] _actionButtonMapping { get; } = [
 			(GamepadActions.A, GamepadButtons.A),
@@ -73,9 +74,17 @@ namespace J113D.Pimu.Desktop.App.Input
 
 		private bool _captureInput;
 
+		[Export]
+		private CheckButton? CheckButtonRightStickUp { get; set; }
 
 		[Signal]
 		public delegate void GamepadStateChangedEventHandler(GamepadInputStateChangedEvent @event);
+
+		public override void _Ready()
+		{
+			base._Ready();
+			CheckButtonRightStickUp!.Toggled += OnRightStickUpToggled;
+		}
 
 		private static Vector2 ConstructJoystick(InputEvent inputEvent, JoystickMapping mapping, Vector2 previous, ref HandledState state)
 		{
@@ -164,6 +173,20 @@ namespace J113D.Pimu.Desktop.App.Input
 			
 				state.StickLeft = ConstructJoystick(inputEvent, _actionJoystickMapping[0], state.StickLeft, ref result);
 				state.StickRight = ConstructJoystick(inputEvent, _actionJoystickMapping[1], state.StickRight, ref result);
+
+				if(inputEvent.IsAction(HotkeyToggleRightStickUp))
+				{
+					if(inputEvent.IsPressed())
+					{
+						CheckButtonRightStickUp!.SetPressedNoSignal(!CheckButtonRightStickUp.ButtonPressed);
+						state.ForceRightStickUp = CheckButtonRightStickUp.ButtonPressed;
+						result = HandledState.HandledChanged;
+					}
+					else if (result == HandledState.None)
+					{
+						result = HandledState.Handled;
+					}
+				}
 			}
 
 			State = state;
@@ -206,6 +229,14 @@ namespace J113D.Pimu.Desktop.App.Input
 			{
 				Godot.Input.MouseMode = Godot.Input.MouseModeEnum.Visible;
 			}
+		}
+
+		private void OnRightStickUpToggled(bool pressed)
+		{
+			GamepadInputState state = State;
+			state.ForceRightStickUp = pressed;
+			State = state;
+			EmitSignalGamepadStateChanged(new GamepadInputStateChangedEvent(State));
 		}
 
 		//public override void _Process(double delta)

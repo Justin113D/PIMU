@@ -226,7 +226,19 @@ Label = "Right stick"
 Actions = Array[Object]([SubResource("Resource_43q62"), SubResource("Resource_2paco"), SubResource("Resource_agfww"), SubResource("Resource_lmwv3"), SubResource("Resource_elcck"), SubResource("Resource_at3sq")])
 metadata/_custom_type_script = "uid://xib25m34jey2"
 
+[sub_resource type="Resource" id="Resource_dv3bo"]
+script = ExtResource("1_tvsjb")
+Label = "Toggle Right Stick Up"
+Action = &"Hotkey_ToggleRightStickUp"
+metadata/_custom_type_script = "uid://h1r1243wctj1"
+
+[sub_resource type="Resource" id="Resource_fbxcv"]
+script = ExtResource("2_e18s3")
+Label = "Hotkeys"
+Actions = Array[Object]([SubResource("Resource_dv3bo")])
+metadata/_custom_type_script = "uid://xib25m34jey2"
+
 [resource]
 script = ExtResource("1_yt415")
-ActionCategories = Array[Object]([SubResource("Resource_3j2ny"), SubResource("Resource_66pg1"), SubResource("Resource_xmi4k"), SubResource("Resource_dhcny"), SubResource("Resource_i8mdg"), SubResource("Resource_qfngc")])
+ActionCategories = Array[Object]([SubResource("Resource_3j2ny"), SubResource("Resource_66pg1"), SubResource("Resource_xmi4k"), SubResource("Resource_dhcny"), SubResource("Resource_i8mdg"), SubResource("Resource_qfngc"), SubResource("Resource_fbxcv")])
 metadata/_custom_type_script = "uid://cnfxth0w2plde"

@@ -111,7 +111,7 @@ namespace J113D.Pimu.Desktop.App.UI
 				? RightStickActive
 				: RightStickDefault;
 
-			RightStick!.OffsetTransformPositionRatio = state.StickRight * _stickOffsetFactor;
+			RightStick!.OffsetTransformPositionRatio = (state.ForceRightStickUp ? new Vector2(0, 1) : state.StickRight) * _stickOffsetFactor;
 
 
 			Vector2 outlineOffset = Vector2.Zero;
