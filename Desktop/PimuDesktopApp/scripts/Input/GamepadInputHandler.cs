@@ -1,5 +1,6 @@
 using Godot;
 using J113D.Pimu.Desktop.Connector.Structs;
+using System;
 
 namespace J113D.Pimu.Desktop.App.Input
 {
@@ -128,8 +129,8 @@ namespace J113D.Pimu.Desktop.App.Input
 				}
 
 				state.PointerDelta = mouseMotion.Relative;
-				//state.Pitch -= mouseMotion.Relative.Y * 0.01f;
-				state.Yaw -= mouseMotion.Relative.X * 0.01f;
+				state.Pitch -= mouseMotion.Relative.Y * 0.002f;
+				state.Yaw -= mouseMotion.Relative.X * 0.001f;
 			}
 			else
 			{
@@ -204,5 +205,20 @@ namespace J113D.Pimu.Desktop.App.Input
 				Godot.Input.MouseMode = Godot.Input.MouseModeEnum.Visible;
 			}
 		}
+
+		//public override void _Process(double delta)
+		//{
+		//	base._Process(delta);
+
+		//	if (!_captureInput)
+		//	{
+		//		return;
+		//	}
+
+		//	GamepadInputState state = State;
+		//	state.Yaw += 0.005f;
+		//	State = state;
+		//	EmitSignalGamepadStateChanged(new GamepadInputStateChangedEvent(State));
+		//}
 	}
 }

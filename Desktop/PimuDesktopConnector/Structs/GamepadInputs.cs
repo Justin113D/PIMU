@@ -15,20 +15,62 @@ namespace J113D.Pimu.Desktop.Connector.Structs
 		public float QuaternionY { get; init; }
 		public float QuaternionZ { get; init; }
 
+		private static void Pack12BitVector(float x, float y, Span<byte> destination)
+		{
+			ushort xp = (ushort)((x * 0.5 + 0.5) * 0xFFF);
+			ushort yp = (ushort)((y * 0.5 + 0.5) * 0xFFF);
+
+			destination[0] = (byte)(xp & 0xFF);
+			destination[1] = (byte)(xp >> 8 | (yp & 0xF) << 4);
+			destination[2] = (byte)(yp >> 4);
+		}
+
+		private static byte PackQuaternion(float[] quaternion, Span<byte> destination)
+		{
+			byte omittedIndex = 0;
+			float abs_quat_max = float.Abs(quaternion[0]);
+
+			for (byte i = 1; i < 4; i++)
+			{
+				float abs_quat = float.Abs(quaternion[i]);
+				if (abs_quat > abs_quat_max)
+				{
+					abs_quat_max = abs_quat;
+					omittedIndex = i;
+				}
+			}
+
+			float quat_factor = 1 / quaternion[omittedIndex];
+
+			for (int i = 0; i < 4; i++)
+			{
+				if (i == omittedIndex)
+				{
+					continue;
+				}
+
+				ushort value = (ushort)(((quaternion[i] * quat_factor) * 0.5 + 0.5) * 0xFFFFu);
+
+				int index = (i + 3 - omittedIndex) % 4;
+				destination[index * 2] = (byte)(value & 0xFF);
+				destination[index * 2 + 1] = (byte)(value >> 8);
+			}
+
+			return omittedIndex;
+		}
+
 		internal readonly byte[] ToBytes()
 		{
-			byte[] result = new byte[36];
+			byte[] result = new byte[15];
 			Span<byte> span = result.AsSpan();
 
-			BitConverter.TryWriteBytes(span, (uint)Buttons);
-			BitConverter.TryWriteBytes(span[4..], StickLeftX);
-			BitConverter.TryWriteBytes(span[8..], StickLeftY);
-			BitConverter.TryWriteBytes(span[12..], StickRightX);
-			BitConverter.TryWriteBytes(span[16..], StickRightY);
-			BitConverter.TryWriteBytes(span[20..], QuaternionW);
-			BitConverter.TryWriteBytes(span[24..], QuaternionX);
-			BitConverter.TryWriteBytes(span[28..], QuaternionY);
-			BitConverter.TryWriteBytes(span[32..], QuaternionZ);
+			Pack12BitVector(StickLeftX, StickLeftY, span[0..]);
+			Pack12BitVector(StickRightX, StickRightY, span[3..]);
+			byte omitted = PackQuaternion([QuaternionW, QuaternionX, QuaternionY, QuaternionZ], span[6..]);
+
+			result[12] = (byte)(((uint)Buttons) & 0xFF);
+			result[13] = (byte)((((uint)Buttons) >> 8) & 0xFF);
+			result[14] = (byte)(((((uint)Buttons) >> 16) & 0xFF) | (byte)(omitted << 6));
 
 			return result;
 		}

@@ -23,6 +23,12 @@
 
 typedef PACKED_STRUCT
 {
+    uint16_t x : 12;
+    uint16_t y : 12;
+} PDC12BitVector2;
+
+typedef PACKED_STRUCT
+{
     uint8_t debug_mode;
     uint8_t debug_features;
     bool bluetooth_disabled;
@@ -45,51 +51,52 @@ typedef PACKED_STRUCT
 
 typedef PACKED_STRUCT
 {
-    PACKED_STRUCT {
-        uint8_t y : 1;
-        uint8_t x : 1;
-        uint8_t b : 1;
-        uint8_t a : 1;
-        uint8_t sr_right : 1;
-        uint8_t sl_right : 1;
-        uint8_t r : 1;
-        uint8_t zr : 1;
+    uint8_t b : 1;
+    uint8_t a : 1;
+    uint8_t y : 1;
+    uint8_t x : 1;
+    uint8_t r : 1;
+    uint8_t zr : 1;
+    uint8_t plus : 1;
+    uint8_t stick_right : 1;
+    
+    uint8_t dpad_down : 1;
+    uint8_t dpad_right : 1;
+    uint8_t dpad_left : 1;
+    uint8_t dpad_up : 1;
+    uint8_t l : 1;
+    uint8_t zl : 1;
+    uint8_t minus : 1;
+    uint8_t stick_left : 1;
+    
+    uint8_t home : 1;
+    uint8_t capture : 1;
+    uint8_t gr : 1;
+    uint8_t gl : 1;
+    uint8_t chat : 1;
+    uint8_t unknown_21 : 1;
+    uint8_t unknown_22 : 1;
+    uint8_t unknown_23 : 1;
+} PimuDeviceConnectorGamepadButtons;
 
-        uint8_t minus : 1;
-        uint8_t plus : 1;
-        uint8_t stick_right : 1;
-        uint8_t stick_left : 1;
-        uint8_t home : 1;
-        uint8_t capture : 1;
-        uint8_t chat : 1;
-        uint8_t unknown_15 : 1;
+typedef PACKED_STRUCT
+{   
+    PDC12BitVector2 stick_left;
+    PDC12BitVector2 stick_right;
+    uint16_t quat_1;
+    uint16_t quat_2;
+    uint16_t quat_3;
+    PimuDeviceConnectorGamepadButtons buttons;
 
-        uint8_t dpad_down : 1;
-        uint8_t dpad_up : 1;
-        uint8_t dpad_right : 1;
-        uint8_t dpad_left : 1;
-        uint8_t sr_left : 1;
-        uint8_t sl_left : 1;
-        uint8_t l : 1;
-        uint8_t zl : 1;
-        
-        uint8_t gr : 1;
-        uint8_t gl : 1;
-        uint8_t unknown_26 : 1;
-        uint8_t unknown_27 : 1;
-        uint8_t headset : 1;
-        uint8_t unknown_29 : 1;
-        uint8_t unknown_30 : 1;
-        uint8_t unknown_31 : 1;
-    } buttons;
-    float stick_left_x;
-    float stick_left_y;
-    float stick_right_x;
-    float stick_right_y;
-    float quaternion_w;
-    float quaternion_x;
-    float quaternion_y;
-    float quaternion_z;
+    /// PimuGamepadInputReport5Buttons buttons;
+    // float stick_left_x;
+    // float stick_left_y;
+    // float stick_right_x;
+    // float stick_right_y;
+    // float quaternion_w;
+    // float quaternion_x;
+    // float quaternion_y;
+    // float quaternion_z;
 } PimuDeviceConnectorGamepadInputs;
 
 //--------------------------------------------------------------------+

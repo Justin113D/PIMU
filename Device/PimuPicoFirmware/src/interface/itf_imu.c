@@ -5,42 +5,11 @@
 
 #include "debug.h"
 
-#define ABSF(_v) ((_v) < 0 ? -(_v) : (_v))
-
-static void pack_quaternion(PimuGamepadIMUData* imu_data, float* quaternion)
-{
-    imu_data->quaternion_omitted_index = 0;
-    float abs_quat_max = ABSF(quaternion[0]);
-    
-    for(int i = 1; i < 4; i++)
-    {
-        float abs_quat = ABSF(quaternion[i]);
-        if(abs_quat > abs_quat_max)
-        {
-            abs_quat_max = abs_quat;
-            imu_data->quaternion_omitted_index = i;
-        }
-    }
-
-    float quat_factor = 1 / quaternion[imu_data->quaternion_omitted_index];
-
-    for(int i = 0, j = 0; i < 4; i++)
-    {
-        if(i == imu_data->quaternion_omitted_index)
-        {
-            continue;
-        }
-
-        ((uint32_t*)&imu_data->quaternion_1)[(j + imu_data->quaternion_omitted_index) % 3] = ((quaternion[i] * quat_factor) * 0.5f + 0.5f) * 0x1FFFFF;
-        j++;
-    }
-}
-
 static void calculate_accel_vector(PimuGamepadIMUData* imu_data, float* quaternion)
 {
     // We calculate the accel vector by 
     // 1. Inversing our quaternion
-    // 2. transforming a (0, 0, 1) vector
+    // 2. transforming a (0, 1, 0) vector
     // 3. Inverting the x and y components
     // The code below accounts for all these steps, with everything that is not needed optimized out
 
@@ -49,13 +18,51 @@ static void calculate_accel_vector(PimuGamepadIMUData* imu_data, float* quaterni
     float y = quaternion[2];
     float z = quaternion[3];
 
-    float ax = 2 * (x * z - y * w);
-    float ay = 2 * (z * y + x * w);
-    float az = w * w - x * x - y * y + z * z;
+    float ax = 2 * (x * y + z * w);
+    float ay = w * w - x * x + y * y - z * z;
+    float az = 2 * (y * z - x * w);
 
-    imu_data->accel_x = ax * 0x7FFF;
-    imu_data->accel_y = ay * 0x7FFF;
-    imu_data->accel_z = az * 0x7FFF;
+    pimu_gamepad_imu_set_accel_vectors(imu_data, ax, ay, az);
+}
+
+static void unpack_quaternion(uint8_t omitted_quaternion_index, uint16_t* quaternion, float* destination)
+{
+    float quat1 = (quaternion[0] / (float)0x7FFF - 1.0f);
+    float quat2 = (quaternion[1] / (float)0x7FFF - 1.0f);
+    float quat3 = (quaternion[2] / (float)0x7FFF - 1.0f);
+
+    float factor = 1.0f / sqrtf(quat1*quat1 + quat2*quat2 + quat3*quat3 + 1);
+    quat1 *= factor;
+    quat2 *= factor;
+    quat3 *= factor;
+
+    switch (omitted_quaternion_index)
+    {
+    case 0:
+        destination[0] = factor;
+        destination[1] = quat1;
+        destination[2] = quat2;
+        destination[3] = quat3;
+        break;
+    case 1:
+        destination[0] = quat3;
+        destination[1] = factor;
+        destination[2] = quat1;
+        destination[3] = quat2;
+        break;
+    case 2:
+        destination[0] = quat2;
+        destination[1] = quat3;
+        destination[2] = factor;
+        destination[3] = quat1;
+        break;
+    case 3:
+        destination[0] = quat1;
+        destination[1] = quat2;
+        destination[2] = quat3;
+        destination[3] = factor;
+        break;
+    }
 }
 
 static int16_t calculate_axis_delta(int axis_index, float* matrix)
@@ -96,20 +103,12 @@ static int16_t calculate_axis_delta(int axis_index, float* matrix)
     return angle * imu_factor;
 }
 
-static void calculate_gyro_delta(PimuGamepadIMUData* imu_data, float* old_quaternion, float* new_quaternion)
+static void calculate_gyro_deltas(PimuGamepadIMUData* imu_data, float* new_quaternion)
 {
-    if(new_quaternion == NULL)
-    {
-        imu_data->gyro_x = 0;
-        imu_data->gyro_y = 0;
-        imu_data->gyro_z = 0;
-        return;
-    }
-
-    float w0 = old_quaternion[0];
-    float x0 = -old_quaternion[1];
-    float y0 = -old_quaternion[2];
-    float z0 = -old_quaternion[3];
+    float w0 = imu_data->quaternion_w;
+    float x0 = -imu_data->quaternion_x;
+    float y0 = -imu_data->quaternion_y;
+    float z0 = -imu_data->quaternion_z;
 
     float w1 = new_quaternion[0];
     float x1 = new_quaternion[1];
@@ -142,13 +141,25 @@ static void calculate_gyro_delta(PimuGamepadIMUData* imu_data, float* old_quater
     imu_data->gyro_z = calculate_axis_delta(2, rotation_matrix) * delta;
 }
 
-void ppf_imu_update(PimuGamepadIMUData* imu_data, float* old_quaternion, float* new_quaternion)
+void ppf_imu_update(PimuGamepadIMUData* imu_data, uint8_t omitted_quaternion_index, uint16_t* quaternion, bool calculate_gyro)
 {
-    float* quaternion = new_quaternion == NULL
-        ? old_quaternion
-        : new_quaternion;
+    imu_data->quaternion_omitted_index = omitted_quaternion_index;
+    imu_data->quaternion_1 = quaternion[0] << 16 | ((quaternion[0] & 0x7F) << 1);
+    imu_data->quaternion_2 = quaternion[1] << 16 | ((quaternion[1] & 0x7F) << 1);
+    imu_data->quaternion_3 = quaternion[2] << 16 | ((quaternion[2] & 0x7F) << 1);
 
-    pack_quaternion(imu_data, quaternion);
-    calculate_accel_vector(imu_data, quaternion);
-    calculate_gyro_delta(imu_data, old_quaternion, new_quaternion);
+    float new_quaternion[4];
+    unpack_quaternion(omitted_quaternion_index, quaternion, new_quaternion);
+
+    calculate_accel_vector(imu_data, new_quaternion);
+
+    if(calculate_gyro)
+    {
+        calculate_gyro_deltas(imu_data, new_quaternion);
+    }
+
+    imu_data->quaternion_w = new_quaternion[0];
+    imu_data->quaternion_x = new_quaternion[1];
+    imu_data->quaternion_y = new_quaternion[2];
+    imu_data->quaternion_z = new_quaternion[3];
 }

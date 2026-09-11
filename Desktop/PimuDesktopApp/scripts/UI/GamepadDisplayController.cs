@@ -128,7 +128,7 @@ namespace J113D.Pimu.Desktop.App.UI
 
 			Outline!.OffsetTransformPositionRatio = outlineOffset * 0.002f;
 
-			GamepadModel!.Quaternion = Basis.FromEuler(new(state.Pitch, state.Yaw, 0), EulerOrder.Xyz).GetRotationQuaternion();
+			GamepadModel!.Quaternion = state.Quaternion;
 		}
 
 		private void SetOutlineMode(OutlineMode outlineMode)

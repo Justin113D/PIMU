@@ -121,7 +121,7 @@ void tud_vendor_rx_cb(uint8_t idx, const uint8_t *buf, uint16_t bufs)
 // HID Input handling
 //--------------------------------------------------------------------+
 
-static uint64_t polling_rate = 1000000 / 200;
+static uint64_t polling_rate = 1000000 / 250;
 static absolute_time_t next_report_timestamp;
 
 void hid_poll(void)

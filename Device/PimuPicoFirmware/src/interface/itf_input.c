@@ -18,7 +18,8 @@ static bool has_received_inputs;
 static absolute_time_t last_updated_timestamp;
 static uint32_t imu_timestamp;
 static bool imu_was_active;
-static float imu_quaternion[4];
+static bool previous_update_had_imu;
+static PimuGamepadIMUData imu_data;
 
 
 void ppf_itf_input_init(void)
@@ -28,6 +29,10 @@ void ppf_itf_input_init(void)
     ppf_gamepad_input_report_5.unknown_3[5] = 1;
 
     ppf_gamepad_input_report_9.unknown = 0x30;
+
+    imu_data.temperature = 0x100; // default value?
+    imu_data.mode = 12;
+    imu_data.confidence_flags = 0x3; // always report full confidence
 }
 
 void ppf_itf_input_receive(PimuDeviceConnectorGamepadInputs* inputs)
@@ -39,46 +44,35 @@ void ppf_itf_input_receive(PimuDeviceConnectorGamepadInputs* inputs)
 void ppf_itf_input_update(void)
 {
     bool imu_active = (pimu_gamepad_get_feature_active(ppf_gamepad) & 0x04) != 0;
-    if(imu_active && !imu_was_active)
+    if(!imu_active && imu_was_active)
     {
-        memset(imu_quaternion, 0, sizeof(imu_quaternion));
-        imu_quaternion[0] = 1;
-        ppf_gamepad_input_report_9.imu_data_len = 40;
-    }
-    else if(!imu_active && imu_was_active)
-    {
-        memset(imu_quaternion, 0, sizeof(imu_quaternion));
         memset(&ppf_gamepad_input_report_5.motion_data, 0, sizeof(ppf_gamepad_input_report_5.motion_data));
         memset(&ppf_gamepad_input_report_9.imu, 0, sizeof(ppf_gamepad_input_report_9.imu));
         ppf_gamepad_input_report_9.imu_data_len = 0;
+        previous_update_had_imu = false;
     }
 
-    float* new_imu_quaternion = NULL;
+    uint16_t* new_imu_quaternion = NULL;
+    uint8_t new_imu_quaternion_omitted_index = 0;
+
+    int report_id = pimu_gamepad_get_report_id(ppf_gamepad);
 
     if(has_received_inputs)
     {
-        memcpy(
-            &ppf_gamepad_input_report_5.buttons,
-            &received_inputs.buttons,
-            sizeof(ppf_gamepad_input_report_5.buttons)
-        );
-    
-        ppf_gamepad_input_report_5.left_stick = pimu_gamepad_inputs_pack_vector(
-            received_inputs.stick_left_x,
-            received_inputs.stick_left_y
-        );
-    
-        ppf_gamepad_input_report_5.right_stick = pimu_gamepad_inputs_pack_vector(
-            received_inputs.stick_right_x,
-            received_inputs.stick_right_y
-        );
+        new_imu_quaternion_omitted_index = ((*(uint32_t*)&received_inputs.buttons) >> 22 & 0x3);
+        new_imu_quaternion = &received_inputs.quat_1;
 
-        pimu_gamepad_copy_inputs_5_to_9(
-            &ppf_gamepad_input_report_5,
-            &ppf_gamepad_input_report_9
-        );
+        ppf_gamepad_input_report_9.buttons = *(PimuGamepadInputReport9Buttons*)&received_inputs.buttons;
+        ppf_gamepad_input_report_9.buttons.unknown_22 = 0;
+        ppf_gamepad_input_report_9.buttons.unknown_23 = 0;
 
-        new_imu_quaternion = &received_inputs.quaternion_w;
+        ppf_gamepad_input_report_9.left_stick = *(PG12BitVector2*)&received_inputs.stick_left;
+        ppf_gamepad_input_report_9.right_stick = *(PG12BitVector2*)&received_inputs.stick_right;
+
+        if(report_id == 5)
+        {
+            pimu_gamepad_copy_inputs_9_to_5(&ppf_gamepad_input_report_9, &ppf_gamepad_input_report_5);
+        }
 
         has_received_inputs = false;
     }
@@ -90,22 +84,37 @@ void ppf_itf_input_update(void)
         int64_t time_delta = absolute_time_diff_us(last_updated_timestamp, now_timestamp);
         imu_timestamp += time_delta;
         
-        PimuGamepadIMUData imu_data = {0};
         imu_data.timestamp = imu_timestamp;
         imu_data.timestamp_delta = time_delta;
-        imu_data.temperature = 0x100; // default value?
-        imu_data.mode = 0xE; // running mode, we do not simulate bootup
-        imu_data.confidence_flags = 0x3; // always report full confidence
-
-        ppf_imu_update(&imu_data, imu_quaternion, new_imu_quaternion);
-
-        pimu_gamepad_pack_5_imu_data(&ppf_gamepad_input_report_5, &imu_data);
-        pimu_gamepad_pack_9_imu_data(&ppf_gamepad_input_report_9, &imu_data);
 
         if(new_imu_quaternion != NULL)
         {
-            memcpy(imu_quaternion, new_imu_quaternion, sizeof(imu_quaternion));
+            ppf_imu_update(
+                &imu_data, 
+                new_imu_quaternion_omitted_index, 
+                new_imu_quaternion, 
+                previous_update_had_imu && report_id == 5
+            );
         }
+        
+        if(previous_update_had_imu != (new_imu_quaternion != NULL))
+        {
+            imu_data.gyro_x = 0;
+            imu_data.gyro_y = 0;
+            imu_data.gyro_z = 0;
+        }        
+
+        switch(report_id)
+        {
+            case 5:
+                pimu_gamepad_pack_5_imu_data(&ppf_gamepad_input_report_5, &imu_data);
+                break;
+            case 9:
+                pimu_gamepad_pack_9_imu_data(&ppf_gamepad_input_report_9, &imu_data);
+                break;
+        }
+
+        previous_update_had_imu = new_imu_quaternion != NULL;
     }
 
     last_updated_timestamp = now_timestamp;

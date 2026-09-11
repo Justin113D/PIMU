@@ -15,9 +15,7 @@ typedef PACKED_STRUCT
 
 typedef PACKED_STRUCT
 {
-    uint32_t counter;
-    PACKED_STRUCT {
-        uint8_t y : 1;
+    uint8_t y : 1;
         uint8_t x : 1;
         uint8_t b : 1;
         uint8_t a : 1;
@@ -52,7 +50,12 @@ typedef PACKED_STRUCT
         uint8_t unknown_29 : 1;
         uint8_t unknown_30 : 1;
         uint8_t unknown_31 : 1;
-    } buttons;
+} PimuGamepadInputReport5Buttons;
+
+typedef PACKED_STRUCT
+{
+    uint32_t counter;
+    PimuGamepadInputReport5Buttons buttons;
     uint8_t unknown_1[2];
     PG12BitVector2 left_stick;
     PG12BitVector2 right_stick;
@@ -92,38 +95,39 @@ PimuGamepadInputReport5;
 
 typedef PACKED_STRUCT
 {
+    uint8_t b : 1;
+    uint8_t a : 1;
+    uint8_t y : 1;
+    uint8_t x : 1;
+    uint8_t r : 1;
+    uint8_t zr : 1;
+    uint8_t plus : 1;
+    uint8_t stick_right : 1;
+    
+    uint8_t dpad_down : 1;
+    uint8_t dpad_right : 1;
+    uint8_t dpad_left : 1;
+    uint8_t dpad_up : 1;
+    uint8_t l : 1;
+    uint8_t zl : 1;
+    uint8_t minus : 1;
+    uint8_t stick_left : 1;
+    
+    uint8_t home : 1;
+    uint8_t capture : 1;
+    uint8_t gr : 1;
+    uint8_t gl : 1;
+    uint8_t chat : 1;
+    uint8_t unknown_21 : 1;
+    uint8_t unknown_22 : 1;
+    uint8_t unknown_23 : 1;
+} PimuGamepadInputReport9Buttons;
+
+typedef PACKED_STRUCT
+{
     uint8_t counter;
     uint8_t connection_info;
-
-    PACKED_STRUCT {
-        uint8_t b : 1;
-        uint8_t a : 1;
-        uint8_t y : 1;
-        uint8_t x : 1;
-        uint8_t r : 1;
-        uint8_t zr : 1;
-        uint8_t plus : 1;
-        uint8_t stick_right : 1;
-        
-        uint8_t dpad_down : 1;
-        uint8_t dpad_right : 1;
-        uint8_t dpad_left : 1;
-        uint8_t dpad_up : 1;
-        uint8_t l : 1;
-        uint8_t zl : 1;
-        uint8_t minus : 1;
-        uint8_t stick_left : 1;
-        
-        uint8_t home : 1;
-        uint8_t capture : 1;
-        uint8_t gr : 1;
-        uint8_t gl : 1;
-        uint8_t chat : 1;
-        uint8_t unknown_21 : 1;
-        uint8_t unknown_22 : 1;
-        uint8_t unknown_23 : 1;
-    } buttons;
-
+    PimuGamepadInputReport9Buttons buttons;
     PG12BitVector2 left_stick;
     PG12BitVector2 right_stick;
     uint8_t unknown;
@@ -146,9 +150,20 @@ typedef struct
     uint32_t quaternion_1;
     uint32_t quaternion_2;
     uint32_t quaternion_3;
-    int16_t accel_x;
-    int16_t accel_y;
-    int16_t accel_z;
+
+    float quaternion_w;
+    float quaternion_x;
+    float quaternion_y;
+    float quaternion_z;
+
+    int32_t accel_x_32;
+    int32_t accel_y_32;
+    int32_t accel_z_32;
+
+    int16_t accel_x_norm16;
+    int16_t accel_y_norm16;
+    int16_t accel_z_norm16;
+
     int16_t gyro_x;
     int16_t gyro_y;
     int16_t gyro_z;
@@ -158,6 +173,9 @@ typedef struct
 
 PG12BitVector2 pimu_gamepad_inputs_pack_vector(float x, float y);
 uint16_t pimu_gamepad_imu_data_get_ms_delta(PimuGamepadIMUData* imu_data);
+
+void pimu_gamepad_imu_pack_quaternion(PimuGamepadIMUData* imu_data, float* quaternion);
+void pimu_gamepad_imu_set_accel_vectors(PimuGamepadIMUData* imu_data, float x, float y, float z);
 
 void pimu_gamepad_copy_inputs_5_to_9(PimuGamepadInputReport5* report_5, PimuGamepadInputReport9* report_9);
 void pimu_gamepad_copy_inputs_9_to_5(PimuGamepadInputReport9* report_9, PimuGamepadInputReport5* report_5);

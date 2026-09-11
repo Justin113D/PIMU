@@ -1,5 +1,6 @@
 using Godot;
 using J113D.Pimu.Desktop.Connector.Structs;
+using System;
 
 namespace J113D.Pimu.Desktop.App.Input
 {
@@ -38,10 +39,11 @@ namespace J113D.Pimu.Desktop.App.Input
 			}
 		}
 
+		public readonly Quaternion Quaternion => Basis.FromEuler(new(Pitch, Yaw, 0), EulerOrder.Zyx).GetRotationQuaternion();
 
 		public GamepadInputs ToInputs()
 		{
-			Quaternion quat = Basis.FromEuler(new(Pitch, 0, Yaw), EulerOrder.Xyz).GetRotationQuaternion();
+			Quaternion quat = Quaternion * new Quaternion(Vector3.Right, float.Pi * -0.5f);
 
 			return new()
 			{

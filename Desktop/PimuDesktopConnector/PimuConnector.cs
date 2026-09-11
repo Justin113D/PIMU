@@ -119,7 +119,6 @@ namespace J113D.Pimu.Desktop.Connector
 						receivedHandshake = receivedMessages?.FirstOrDefault(x => x.Destination == MessageDestination.DesktopHandshake) ?? default;
 						if(receivedHandshake.Destination != default)
 						{
-							Console.WriteLine("Received handshake");
 							break;
 						}
 
@@ -177,10 +176,6 @@ namespace J113D.Pimu.Desktop.Connector
 		private async Task<Message[]?> ReadAsync()
 		{
 			int bytesRead = await _messageStream.ReadAsync(_readBuffer.SerialBuffer);
-			if(bytesRead > 0)
-			{
-				Console.WriteLine(bytesRead);
-			}
 			return _readBuffer.Deserialize(bytesRead);
 		}
 
