@@ -46,8 +46,8 @@ namespace J113D.Pimu.Desktop.App
 		public override void _EnterTree()
 		{
 			base._EnterTree();
-			InputMappingHelper.StoreDefault();
-			InputMappingHelper.LoadFromFile();
+			InputMappingConfig.StoreDefault();
+			InputMappingConfig.LoadFromFile();
 		}
 
 

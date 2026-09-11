@@ -11,6 +11,23 @@ content_margin_right = 8.0
 content_margin_bottom = 8.0
 bg_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xcb45"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.22352941, 0.22352941, 0.22352941, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_imjvu"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fbxcv"]
 content_margin_left = 24.0
 content_margin_top = 24.0
@@ -29,7 +46,7 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="InputMappingWindow" type="Window" unique_id=2068285387 node_paths=PackedStringArray("InputMappingContainer", "ControlRecordOverlay", "LabelRecordAction")]
+[node name="InputMappingWindow" type="Window" unique_id=2068285387 node_paths=PackedStringArray("InputMappingContainer", "ControlRecordOverlay", "LabelRecordAction", "HMouseSensitivityEdit", "HMouseSensitivitySlider", "VMouseSensitivityEdit", "VMouseSensitivitySlider")]
 oversampling_override = 1.0
 title = "Input Mapping"
 initial_position = 2
@@ -37,10 +54,14 @@ size = Vector2i(500, 600)
 exclusive = true
 script = ExtResource("1_34acx")
 InputMapping = ExtResource("2_q0p40")
-InputMappingContainer = NodePath("PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer")
+InputMappingContainer = NodePath("PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_InputMapping")
 InputMappingRow = ExtResource("3_fbxcv")
 ControlRecordOverlay = NodePath("PanelContainer/Container_RecordingOverlay")
 LabelRecordAction = NodePath("PanelContainer/Container_RecordingOverlay/PanelContainer/VBoxContainer/Label_Action")
+HMouseSensitivityEdit = NodePath("PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_HMouseSensitivity/VBoxContainer/HBoxContainer/LineEdit_HValue")
+HMouseSensitivitySlider = NodePath("PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_HMouseSensitivity/VBoxContainer/Slider_HValue")
+VMouseSensitivityEdit = NodePath("PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_VMouseSensitivity/VBoxContainer/HBoxContainer/LineEdit_VValue")
+VMouseSensitivitySlider = NodePath("PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_VMouseSensitivity/VBoxContainer/Slider_VValue")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1011319442]
 anchors_preset = 15
@@ -83,10 +104,73 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer" unique_id=853185130]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1312971331]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
+
+[node name="Container_HMouseSensitivity" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=713021626]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xcb45")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_HMouseSensitivity" unique_id=1421061814]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_HMouseSensitivity/VBoxContainer" unique_id=872090020]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_HMouseSensitivity/VBoxContainer/HBoxContainer" unique_id=991398404]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_imjvu")
+text = "Horizontal Mouse Sensitivity"
+
+[node name="LineEdit_HValue" type="LineEdit" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_HMouseSensitivity/VBoxContainer/HBoxContainer" unique_id=1527755461]
+custom_minimum_size = Vector2(85, 38)
+layout_mode = 2
+size_flags_horizontal = 10
+placeholder_text = "1.000"
+alignment = 2
+select_all_on_focus = true
+
+[node name="Slider_HValue" type="HSlider" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_HMouseSensitivity/VBoxContainer" unique_id=374760859]
+layout_mode = 2
+min_value = 0.001
+max_value = 10.0
+step = 0.001
+value = 1.0
+
+[node name="Container_VMouseSensitivity" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=130238990]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xcb45")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_VMouseSensitivity" unique_id=1456788015]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_VMouseSensitivity/VBoxContainer" unique_id=1800396851]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_VMouseSensitivity/VBoxContainer/HBoxContainer" unique_id=167487030]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_imjvu")
+text = "Vertical Mouse Sensitivity"
+
+[node name="LineEdit_VValue" type="LineEdit" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_VMouseSensitivity/VBoxContainer/HBoxContainer" unique_id=609927183]
+custom_minimum_size = Vector2(85, 38)
+layout_mode = 2
+size_flags_horizontal = 10
+placeholder_text = "1.000"
+alignment = 2
+select_all_on_focus = true
+
+[node name="Slider_VValue" type="HSlider" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/Container_VMouseSensitivity/VBoxContainer" unique_id=876331384]
+layout_mode = 2
+min_value = 0.001
+max_value = 10.0
+step = 0.001
+value = 1.001
+
+[node name="Container_InputMapping" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=853185130]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="Container_RecordingOverlay" type="PanelContainer" parent="PanelContainer" unique_id=1792115844]
 visible = false

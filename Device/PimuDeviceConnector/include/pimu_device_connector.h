@@ -86,17 +86,8 @@ typedef PACKED_STRUCT
     uint16_t quat_1;
     uint16_t quat_2;
     uint16_t quat_3;
+    uint8_t quat_extra;
     PimuDeviceConnectorGamepadButtons buttons;
-
-    /// PimuGamepadInputReport5Buttons buttons;
-    // float stick_left_x;
-    // float stick_left_y;
-    // float stick_right_x;
-    // float stick_right_y;
-    // float quaternion_w;
-    // float quaternion_x;
-    // float quaternion_y;
-    // float quaternion_z;
 } PimuDeviceConnectorGamepadInputs;
 
 //--------------------------------------------------------------------+

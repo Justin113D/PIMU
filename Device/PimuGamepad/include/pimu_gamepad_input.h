@@ -93,6 +93,13 @@ typedef PACKED_STRUCT
 }
 PimuGamepadInputReport5;
 
+#define PG_INPUT_POWER_INFO_EXTERNAL_POWER 0x01
+#define PG_INPUT_POWER_INFO_CHARGING 0x02
+#define PG_INPUT_POWER_INFO_BATTERY_0 0x04
+#define PG_INPUT_POWER_INFO_BATTERY_1 0x08
+#define PG_INPUT_POWER_INFO_BATTERY_2 0x10
+#define PG_INPUT_POWER_INFO_BATTERY_3 0x20
+
 typedef PACKED_STRUCT
 {
     uint8_t b : 1;
@@ -126,7 +133,7 @@ typedef PACKED_STRUCT
 typedef PACKED_STRUCT
 {
     uint8_t counter;
-    uint8_t connection_info;
+    uint8_t power_info;
     PimuGamepadInputReport9Buttons buttons;
     PG12BitVector2 left_stick;
     PG12BitVector2 right_stick;

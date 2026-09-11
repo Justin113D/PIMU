@@ -85,20 +85,20 @@ namespace J113D.Pimu.Desktop.App.UI
 
 			if(newEvent != null)
 			{
-				InputMappingHelper.SetAction(Action!, newEvent);
+				InputMappingConfig.SetAction(Action!, newEvent);
 				Refresh();
 			}
 		}
 
 		public void Clear()
 		{
-			InputMappingHelper.ClearAction(Action!);
+			InputMappingConfig.ClearAction(Action!);
 			Refresh();
 		}
 
 		public void Reset()
 		{
-			InputMappingHelper.ResetAction(Action!);
+			InputMappingConfig.ResetAction(Action!);
 			Refresh();
 		}
 	}

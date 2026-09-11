@@ -25,11 +25,11 @@ static void calculate_accel_vector(PimuGamepadIMUData* imu_data, float* quaterni
     pimu_gamepad_imu_set_accel_vectors(imu_data, ax, ay, az);
 }
 
-static void unpack_quaternion(uint8_t omitted_quaternion_index, uint16_t* quaternion, float* destination)
+static void unpack_quaternion(uint8_t omitted_quaternion_index, uint32_t* quaternion, float* destination)
 {
-    float quat1 = (quaternion[0] / (float)0x7FFF - 1.0f);
-    float quat2 = (quaternion[1] / (float)0x7FFF - 1.0f);
-    float quat3 = (quaternion[2] / (float)0x7FFF - 1.0f);
+    float quat1 = (quaternion[0] / (float)0x7FFFFFFF - 1.0f);
+    float quat2 = (quaternion[1] / (float)0x7FFFFFFF - 1.0f);
+    float quat3 = (quaternion[2] / (float)0x7FFFFFFF - 1.0f);
 
     float factor = 1.0f / sqrtf(quat1*quat1 + quat2*quat2 + quat3*quat3 + 1);
     quat1 *= factor;
@@ -141,15 +141,15 @@ static void calculate_gyro_deltas(PimuGamepadIMUData* imu_data, float* new_quate
     imu_data->gyro_z = calculate_axis_delta(2, rotation_matrix) * delta;
 }
 
-void ppf_imu_update(PimuGamepadIMUData* imu_data, uint8_t omitted_quaternion_index, uint16_t* quaternion, bool calculate_gyro)
+void ppf_imu_update(PimuGamepadIMUData* imu_data, PimuDeviceConnectorGamepadInputs* received_inputs, bool calculate_gyro)
 {
-    imu_data->quaternion_omitted_index = omitted_quaternion_index;
-    imu_data->quaternion_1 = quaternion[0] << 16 | ((quaternion[0] & 0x7F) << 1);
-    imu_data->quaternion_2 = quaternion[1] << 16 | ((quaternion[1] & 0x7F) << 1);
-    imu_data->quaternion_3 = quaternion[2] << 16 | ((quaternion[2] & 0x7F) << 1);
+    imu_data->quaternion_omitted_index = received_inputs->quat_extra >> 6;
+    imu_data->quaternion_1 = received_inputs->quat_1 << 16 | ((received_inputs->quat_extra << 14) & 0xC000) | (received_inputs->quat_1 >> 2);
+    imu_data->quaternion_2 = received_inputs->quat_2 << 16 | ((received_inputs->quat_extra << 12) & 0xC000) | (received_inputs->quat_2 >> 2);
+    imu_data->quaternion_3 = received_inputs->quat_3 << 16 | ((received_inputs->quat_extra << 10) & 0xC000) | (received_inputs->quat_3 >> 2);
 
     float new_quaternion[4];
-    unpack_quaternion(omitted_quaternion_index, quaternion, new_quaternion);
+    unpack_quaternion(imu_data->quaternion_omitted_index, &imu_data->quaternion_1, new_quaternion);
 
     calculate_accel_vector(imu_data, new_quaternion);
 

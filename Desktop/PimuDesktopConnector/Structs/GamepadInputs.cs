@@ -25,7 +25,7 @@ namespace J113D.Pimu.Desktop.Connector.Structs
 			destination[2] = (byte)(yp >> 4);
 		}
 
-		private static byte PackQuaternion(float[] quaternion, Span<byte> destination)
+		private static void PackQuaternion(float[] quaternion, Span<byte> destination)
 		{
 			byte omittedIndex = 0;
 			float abs_quat_max = float.Abs(quaternion[0]);
@@ -41,6 +41,7 @@ namespace J113D.Pimu.Desktop.Connector.Structs
 			}
 
 			float quat_factor = 1 / quaternion[omittedIndex];
+			byte extra = 0; // II332211
 
 			for (int i = 0; i < 4; i++)
 			{
@@ -49,28 +50,30 @@ namespace J113D.Pimu.Desktop.Connector.Structs
 					continue;
 				}
 
-				ushort value = (ushort)(((quaternion[i] * quat_factor) * 0.5 + 0.5) * 0xFFFFu);
+				uint value = (uint)(((quaternion[i] * quat_factor) * 0.5 + 0.5) * 0xFFFFFFFFu);
 
 				int index = (i + 3 - omittedIndex) % 4;
-				destination[index * 2] = (byte)(value & 0xFF);
-				destination[index * 2 + 1] = (byte)(value >> 8);
+				destination[index * 2] = (byte)((value >> 16) & 0xFF);
+				destination[index * 2 + 1] = (byte)(value >> 24);
+
+				extra |= (byte)(((value >> 14) & 0x3) << (index * 2));
 			}
 
-			return omittedIndex;
+			destination[6] = (byte)(extra | (omittedIndex << 6));
 		}
 
 		internal readonly byte[] ToBytes()
 		{
-			byte[] result = new byte[15];
+			byte[] result = new byte[16];
 			Span<byte> span = result.AsSpan();
 
 			Pack12BitVector(StickLeftX, StickLeftY, span[0..]);
 			Pack12BitVector(StickRightX, StickRightY, span[3..]);
-			byte omitted = PackQuaternion([QuaternionW, QuaternionX, QuaternionY, QuaternionZ], span[6..]);
+			PackQuaternion([QuaternionW, QuaternionX, QuaternionY, QuaternionZ], span[6..]);
 
-			result[12] = (byte)(((uint)Buttons) & 0xFF);
-			result[13] = (byte)((((uint)Buttons) >> 8) & 0xFF);
-			result[14] = (byte)(((((uint)Buttons) >> 16) & 0xFF) | (byte)(omitted << 6));
+			result[13] = (byte)(((uint)Buttons) & 0xFF);
+			result[14] = (byte)((((uint)Buttons) >> 8) & 0xFF);
+			result[15] = (byte)((((uint)Buttons) >> 16) & 0xFF);
 
 			return result;
 		}

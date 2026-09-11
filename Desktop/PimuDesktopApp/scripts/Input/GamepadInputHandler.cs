@@ -1,4 +1,6 @@
 using Godot;
+using J113D.Pimu.Desktop.App.Input.Mapping;
+using J113D.Pimu.Desktop.App.scripts.Input.Config;
 using J113D.Pimu.Desktop.Connector.Structs;
 using System;
 
@@ -128,9 +130,9 @@ namespace J113D.Pimu.Desktop.App.Input
 					result = HandledState.Handled;
 				}
 
-				state.PointerDelta = mouseMotion.Relative;
-				state.Pitch -= mouseMotion.Relative.Y * 0.002f;
-				state.Yaw -= mouseMotion.Relative.X * 0.001f;
+				state.PointerDelta = mouseMotion.ScreenRelative;
+				state.Pitch -= mouseMotion.ScreenRelative.Y * 0.01f * InputMappingConfig.MouseSensitivity.X;
+				state.Yaw -= mouseMotion.ScreenRelative.X * 0.01f * InputMappingConfig.MouseSensitivity.Y;
 			}
 			else
 			{

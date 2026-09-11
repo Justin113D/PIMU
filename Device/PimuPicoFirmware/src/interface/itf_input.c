@@ -28,6 +28,7 @@ void ppf_itf_input_init(void)
     ppf_gamepad_input_report_5.battery_charging_state = 0x20;
     ppf_gamepad_input_report_5.unknown_3[5] = 1;
 
+    ppf_gamepad_input_report_9.power_info = PG_INPUT_POWER_INFO_EXTERNAL_POWER | 0x24; // battery level "9"
     ppf_gamepad_input_report_9.unknown = 0x30;
 
     imu_data.temperature = 0x100; // default value?
@@ -52,20 +53,11 @@ void ppf_itf_input_update(void)
         previous_update_had_imu = false;
     }
 
-    uint16_t* new_imu_quaternion = NULL;
-    uint8_t new_imu_quaternion_omitted_index = 0;
-
     int report_id = pimu_gamepad_get_report_id(ppf_gamepad);
 
     if(has_received_inputs)
     {
-        new_imu_quaternion_omitted_index = ((*(uint32_t*)&received_inputs.buttons) >> 22 & 0x3);
-        new_imu_quaternion = &received_inputs.quat_1;
-
         ppf_gamepad_input_report_9.buttons = *(PimuGamepadInputReport9Buttons*)&received_inputs.buttons;
-        ppf_gamepad_input_report_9.buttons.unknown_22 = 0;
-        ppf_gamepad_input_report_9.buttons.unknown_23 = 0;
-
         ppf_gamepad_input_report_9.left_stick = *(PG12BitVector2*)&received_inputs.stick_left;
         ppf_gamepad_input_report_9.right_stick = *(PG12BitVector2*)&received_inputs.stick_right;
 
@@ -73,8 +65,6 @@ void ppf_itf_input_update(void)
         {
             pimu_gamepad_copy_inputs_9_to_5(&ppf_gamepad_input_report_9, &ppf_gamepad_input_report_5);
         }
-
-        has_received_inputs = false;
     }
 
     absolute_time_t now_timestamp = get_absolute_time();
@@ -87,17 +77,16 @@ void ppf_itf_input_update(void)
         imu_data.timestamp = imu_timestamp;
         imu_data.timestamp_delta = time_delta;
 
-        if(new_imu_quaternion != NULL)
+        if(has_received_inputs)
         {
             ppf_imu_update(
                 &imu_data, 
-                new_imu_quaternion_omitted_index, 
-                new_imu_quaternion, 
+                &received_inputs, 
                 previous_update_had_imu && report_id == 5
             );
         }
         
-        if(previous_update_had_imu != (new_imu_quaternion != NULL))
+        if(previous_update_had_imu != has_received_inputs)
         {
             imu_data.gyro_x = 0;
             imu_data.gyro_y = 0;
@@ -114,9 +103,10 @@ void ppf_itf_input_update(void)
                 break;
         }
 
-        previous_update_had_imu = new_imu_quaternion != NULL;
+        previous_update_had_imu = has_received_inputs;
     }
 
+    has_received_inputs = false;
     last_updated_timestamp = now_timestamp;
     imu_was_active = imu_active;
 }

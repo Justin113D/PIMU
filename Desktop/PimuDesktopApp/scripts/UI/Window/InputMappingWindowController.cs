@@ -19,13 +19,26 @@ namespace J113D.Pimu.Desktop.App.UI.Window
 		private Control? InputMappingContainer { get; set; }
 
 		[Export]
-		public PackedScene? InputMappingRow { get; set; }
+		private PackedScene? InputMappingRow { get; set; }
 
 		[Export]
-		public Control? ControlRecordOverlay { get; set; }
+		private Control? ControlRecordOverlay { get; set; }
 
 		[Export]
-		public Label? LabelRecordAction { get; set; }
+		private Label? LabelRecordAction { get; set; }
+
+
+		[Export]
+		private LineEdit? HMouseSensitivityEdit { get; set; }
+
+		[Export]
+		private Slider? HMouseSensitivitySlider { get; set; }
+
+		[Export]
+		private LineEdit? VMouseSensitivityEdit { get; set; }
+
+		[Export]
+		private Slider? VMouseSensitivitySlider { get; set; }
 
 
 		public override void _Ready()
@@ -59,7 +72,56 @@ namespace J113D.Pimu.Desktop.App.UI.Window
 			}
 
 			_inputMappingControllers = [.. controllers];
+
+			HMouseSensitivitySlider!.ValueChanged += HorizontalSliderChanged;
+			HMouseSensitivityEdit!.TextSubmitted += HorizonalTextChanged;
+			HMouseSensitivityEdit!.FocusExited += UpdateSensitivies;
+
+			VMouseSensitivitySlider!.ValueChanged += VerticalSliderChanged;
+			VMouseSensitivityEdit!.TextSubmitted += VerticalTextChanged;
+			VMouseSensitivityEdit!.FocusExited += UpdateSensitivies;
+
+			UpdateSensitivies();
 		}
+
+		private void UpdateSensitivies()
+		{
+			HMouseSensitivitySlider!.SetValueNoSignal(InputMappingConfig.MouseSensitivity.X);
+			HMouseSensitivityEdit!.Text = InputMappingConfig.MouseSensitivity.X.ToString("F3", System.Globalization.CultureInfo.InvariantCulture);
+			VMouseSensitivitySlider!.SetValueNoSignal(InputMappingConfig.MouseSensitivity.Y);
+			VMouseSensitivityEdit!.Text = InputMappingConfig.MouseSensitivity.Y.ToString("F3", System.Globalization.CultureInfo.InvariantCulture);
+		}
+
+		private void HorizonalTextChanged(string newText)
+		{
+			if(float.TryParse(newText, System.Globalization.CultureInfo.InvariantCulture, out float value))
+			{
+				InputMappingConfig.MouseSensitivity = new((float)value, InputMappingConfig.MouseSensitivity.Y);
+				UpdateSensitivies();
+			}
+		}
+
+		private void HorizontalSliderChanged(double value)
+		{
+			InputMappingConfig.MouseSensitivity = new((float)value, InputMappingConfig.MouseSensitivity.Y);
+			UpdateSensitivies();
+		}
+
+		private void VerticalTextChanged(string newText)
+		{
+			if (float.TryParse(newText, System.Globalization.CultureInfo.InvariantCulture, out float value))
+			{
+				InputMappingConfig.MouseSensitivity = new(InputMappingConfig.MouseSensitivity.X, (float)value);
+				UpdateSensitivies();
+			}
+		}
+
+		private void VerticalSliderChanged(double value)
+		{
+			InputMappingConfig.MouseSensitivity = new(InputMappingConfig.MouseSensitivity.X, (float)value);
+			UpdateSensitivies();
+		}
+
 
 		public override void _Input(InputEvent @event)
 		{
@@ -96,13 +158,13 @@ namespace J113D.Pimu.Desktop.App.UI.Window
 				StopRecording(null);
 			}
 
-			InputMappingHelper.SaveToFile();
+			InputMappingConfig.SaveToFile();
 			Visible = false;
 		}
 
 		public void Copy()
 		{
-			string text = InputMappingHelper.ToConfigFile().EncodeToText();
+			string text = InputMappingConfig.ToConfigFile().EncodeToText();
 			DisplayServer.ClipboardSet(text);
 		}
 
@@ -112,14 +174,14 @@ namespace J113D.Pimu.Desktop.App.UI.Window
 			ConfigFile config = new();
 			if(config.Parse(text) == Error.Ok)
 			{
-				InputMappingHelper.Load(config);
+				InputMappingConfig.Load(config);
 				RefreshAll();
 			}
 		}
 
 		public void ResetAll()
 		{
-			InputMappingHelper.ResetAll();
+			InputMappingConfig.ResetAll();
 			RefreshAll();
 		}
 
@@ -145,6 +207,9 @@ namespace J113D.Pimu.Desktop.App.UI.Window
 			{
 				controller.Refresh();
 			}
+			UpdateSensitivies();
 		}
+	
+		
 	}
 }
