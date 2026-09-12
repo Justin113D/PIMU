@@ -23,6 +23,9 @@ namespace J113D.Pimu.Desktop.App
 		private PopupMenu? MenuPimuDevice { get; set; }
 
 		[Export]
+		private PopupMenu? MenuSettings { get; set; }
+
+		[Export]
 		private ConnectWindowController? ConnectWindow { get; set; }
 
 		[Export]
@@ -40,7 +43,11 @@ namespace J113D.Pimu.Desktop.App
 		[Export]
 		private AcceptDialog? DialogDisconnected { get; set; }
 
+		[Export]
+		private Control? ContainerDebugOutput { get; set; }
 
+		[Export]
+		private RichTextLabel? RichTextLabelDebugOutput { get; set; }
 
 
 		public override void _EnterTree()
@@ -78,6 +85,10 @@ namespace J113D.Pimu.Desktop.App
 				case 0:
 					InputMappingWindow!.PopupCentered();
 					break;
+				case 1:
+					ContainerDebugOutput!.Visible = !ContainerDebugOutput!.Visible;
+					MenuSettings!.SetItemChecked(1, ContainerDebugOutput!.Visible);
+					break;
 			}
 		}
 
@@ -88,7 +99,7 @@ namespace J113D.Pimu.Desktop.App
 
 			if(result.result == PimuConnector.ConnectionResult.Success)
 			{
-				_connector = new(result.connector!);
+				_connector = new(result.connector!, RichTextLabelDebugOutput!);
 				_connector.Connect(Node.SignalName.TreeExiting, new(this, MethodName.OnConnectorExiting));
 
 				_connector.Connect(GamepadConnector.SignalName.LEDsChanged, new(DisplayController, GamepadDisplayController.MethodName.OnLEDsChanged));

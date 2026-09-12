@@ -10,7 +10,10 @@ namespace J113D.Pimu.Desktop.App
 {
 	public partial class GamepadConnector : Node
 	{
+		
 		private readonly PimuConnector _connector;
+		private readonly RichTextLabel _debugOutput;
+		private string _queuedDebugOutput = string.Empty;
 
 		private GamepadInputState? _sendState;
 
@@ -30,9 +33,10 @@ namespace J113D.Pimu.Desktop.App
 		public delegate void LEDsChangedEventHandler(GamepadLEDsChangedEvent @event);
 
 
-		public GamepadConnector(PimuConnector connector)
+		public GamepadConnector(PimuConnector connector, RichTextLabel debugOutput)
 		{
 			_connector = connector;
+			_debugOutput = debugOutput;
 
 			_connector.Disconnected += OnDisconnected;
 			_connector.ReceivedFirmwareCurrentConfig += OnReceivedFirmwareCurrentConfig;
@@ -55,6 +59,12 @@ namespace J113D.Pimu.Desktop.App
 		public override async void _Process(double delta)
 		{
 			base._Process(delta);
+
+			if(_queuedDebugOutput.Length > 0)
+			{
+				_debugOutput!.Text += _queuedDebugOutput;
+				_queuedDebugOutput = string.Empty;
+			}
 
 			if(_sendState == null)
 			{
@@ -84,6 +94,7 @@ namespace J113D.Pimu.Desktop.App
 		private void OnReceivedDebug(string port, ReceivedDebugEventArgs args)
 		{
 			GD.Print(args.Debug);
+			_queuedDebugOutput += args.Debug + '\n';
 		}
 
 		private void OnReceivedFirmwareCurrentConfig(string port, ReceivedFirmwareCurrentConfigEventArgs args)

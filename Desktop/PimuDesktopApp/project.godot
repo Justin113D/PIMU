@@ -37,6 +37,10 @@ window/vsync/vsync_mode=0
 
 project/assembly_name="Pimu Desktop App"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/zylann.editor_debugger/plugin.cfg")
+
 [gui]
 
 theme/custom="uid://cir8fdveo7s08"
