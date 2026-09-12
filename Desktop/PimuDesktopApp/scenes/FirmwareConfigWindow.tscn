@@ -23,13 +23,14 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="FirmwareConfigPopup" type="Window" unique_id=1389164367 node_paths=PackedStringArray("OptionButtonDebugMode", "CheckBoxDFBluetooth", "CheckBoxDFUSB", "CheckBoxDFConnector", "CheckBoxDFGamepad", "DialogSaved", "BusyIndicator")]
+[node name="FirmwareConfigPopup" type="Window" unique_id=1389164367 node_paths=PackedStringArray("CheckBoxDisableBluetooth", "OptionButtonDebugMode", "CheckBoxDFBluetooth", "CheckBoxDFUSB", "CheckBoxDFConnector", "CheckBoxDFGamepad", "DialogSaved", "BusyIndicator")]
 oversampling_override = 1.0
 title = "PIMU Firmware Configuration"
 initial_position = 2
-size = Vector2i(400, 300)
+size = Vector2i(400, 340)
 exclusive = true
 script = ExtResource("1_1ynqf")
+CheckBoxDisableBluetooth = NodePath("PanelContainer/Container_Contents/VBoxContainer/Container_DisableBluetooth/CheckBox_DisableBluetooth")
 OptionButtonDebugMode = NodePath("PanelContainer/Container_Contents/VBoxContainer/Container_DebugMode/OptionButton_DebugMode")
 CheckBoxDFBluetooth = NodePath("PanelContainer/Container_Contents/VBoxContainer/Container_DebugFeatures/VBoxContainer/CheckBox_DF_Bluetooth")
 CheckBoxDFUSB = NodePath("PanelContainer/Container_Contents/VBoxContainer/Container_DebugFeatures/VBoxContainer/CheckBox_DF_USB")
@@ -62,6 +63,14 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_u3pmr")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Container_Contents" unique_id=265043820]
 layout_mode = 2
+
+[node name="Container_DisableBluetooth" type="PanelContainer" parent="PanelContainer/Container_Contents/VBoxContainer" unique_id=750358634]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_y3mno")
+
+[node name="CheckBox_DisableBluetooth" type="CheckBox" parent="PanelContainer/Container_Contents/VBoxContainer/Container_DisableBluetooth" unique_id=1463175054]
+layout_mode = 2
+text = "Disable Bluetooth"
 
 [node name="Container_DebugMode" type="HBoxContainer" parent="PanelContainer/Container_Contents/VBoxContainer" unique_id=1351243717]
 layout_mode = 2
@@ -110,6 +119,7 @@ layout_mode = 2
 [node name="Button_Save" type="Button" parent="PanelContainer/Container_Contents/VBoxContainer" unique_id=937578113]
 layout_mode = 2
 size_flags_horizontal = 8
+size_flags_vertical = 10
 text = "Save to PIMU device"
 
 [node name="BusyIndicator" parent="PanelContainer" unique_id=332091192 instance=ExtResource("1_u3pmr")]

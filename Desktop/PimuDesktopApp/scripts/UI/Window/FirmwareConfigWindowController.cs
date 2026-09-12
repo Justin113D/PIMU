@@ -17,6 +17,9 @@ namespace J113D.Pimu.Desktop.App.UI.Window
 		#region Exports
 
 		[Export]
+		private CheckBox? CheckBoxDisableBluetooth { get; set; }
+
+		[Export]
 		private OptionButton? OptionButtonDebugMode { get; set; }
 
 		[Export]
@@ -59,6 +62,7 @@ namespace J113D.Pimu.Desktop.App.UI.Window
 
 			FirmwareConfig config = connector.Config;
 
+			CheckBoxDisableBluetooth!.ButtonPressed = config.BluetoothDisabled;
 			OptionButtonDebugMode!.Selected = (int)config.DebugMode;
 			CheckBoxDFBluetooth!.ButtonPressed = config.DebugFeatures.HasFlag(FirmwareConfigDebugFeature.Bluetooth);
 			CheckBoxDFUSB!.ButtonPressed = config.DebugFeatures.HasFlag(FirmwareConfigDebugFeature.USB);
@@ -87,6 +91,7 @@ namespace J113D.Pimu.Desktop.App.UI.Window
 
 			_savingConfig = new()
 			{
+				BluetoothDisabled = CheckBoxDisableBluetooth!.ButtonPressed,
 				DebugMode = (FirmwareConfigDebugMode)OptionButtonDebugMode!.Selected,
 				DebugFeatures =
 					(CheckBoxDFBluetooth!.ButtonPressed ? FirmwareConfigDebugFeature.Bluetooth : default)

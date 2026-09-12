@@ -93,7 +93,6 @@ namespace J113D.Pimu.Desktop.App
 
 		private void OnReceivedDebug(string port, ReceivedDebugEventArgs args)
 		{
-			GD.Print(args.Debug);
 			_queuedDebugOutput += args.Debug + '\n';
 		}
 
