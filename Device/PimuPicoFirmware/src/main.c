@@ -32,6 +32,7 @@ int main(void)
     ppf_debug_init();
     PPF_DEBUG_BLANK(0, "================== Initialized ==================");
     PPF_DEBUG_BLANK(0, "Running: PIMU (Switch 2 pro controller Simulator)");
+    PPF_DEBUG_BLANK(0, "Version: 1.0.0");
     PPF_DEBUG_BLANK(0, "");
 
     ppf_hci_init();
