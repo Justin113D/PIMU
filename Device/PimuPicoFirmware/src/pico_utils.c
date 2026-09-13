@@ -2,7 +2,9 @@
 
 #include <stdint.h>
 
-#ifdef CYW43_WL_GPIO_LED_PIN
+#if defined(PICO_DEFAULT_LED_PIN)
+#include "pico/stdlib.h"
+#elif defined(CYW43_WL_GPIO_LED_PIN)
 #include "pico/cyw43_arch.h"
 #include "config.h"
 #endif

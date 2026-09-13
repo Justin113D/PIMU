@@ -1,5 +1,7 @@
 #include "pimu_gamepad_input.h"
 
+#include <string.h>
+
 PG12BitVector2 pimu_gamepad_inputs_pack_vector(float x, float y)
 {
     if(x < -1)
@@ -201,10 +203,8 @@ void pack_imu_state_12(uint8_t* dst, PimuGamepadIMUData* imu_data)
     dst[10]  = SINGLE(quaternion_3, 26, 10);
     dst[11]  = SINGLE(quaternion_3, 26, 18);
 
-    *((int32_t*)&dst[12]) = imu_data->accel_x_32; 
-    *((int32_t*)&dst[16]) = imu_data->accel_y_32;
-    *((int32_t*)&dst[20]) = imu_data->accel_z_32;
-    *((int16_t*)&dst[24]) = imu_data->unknown;
+    memcpy(&dst[12], &imu_data->accel_x_32, sizeof(int32_t) * 3);
+    memcpy(&dst[24], &imu_data->unknown, sizeof(int16_t));
 }
 
 void pack_imu_state_14(uint8_t* dst, PimuGamepadIMUData* imu_data)

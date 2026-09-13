@@ -1,5 +1,7 @@
 #include "itf_bluetooth.h"
 
+PimuDeviceConnector* ppf_device_connector_bluetooth;
+
 #ifdef BLUETOOTH_ENABLED
 
 #include "pico/sync.h"
@@ -8,7 +10,6 @@
 #include "itf_connector.h"
 #include "debug.h"
 
-PimuDeviceConnector* ppf_device_connector_bluetooth;
 mutex_t mutex_bluetooth;
 
 static void bluetooth_lock(PimuDeviceConnector *connector)
@@ -72,6 +73,8 @@ void ppf_itf_bluetooth_init(void)
 }
 
 #else
+
+#include <stdlib.h>
 
 void ppf_itf_bluetooth_init(void)
 {

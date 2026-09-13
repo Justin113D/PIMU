@@ -24,10 +24,9 @@ if (EXISTS ${picoVscode})
 endif()
 # ====================================================================================
 
-set(PICO_BOARD pico2_w CACHE STRING "Board type")
-set(PICO_DEOPTIMIZED_DEBUG 1)
-set(CFG_TUSB_DEBUG 3)
-set(CFG_TUD_LOG_LEVEL 3)
+if (NOT DEFINED PICO_BOARD)
+    set(PICO_BOARD pico2_w CACHE STRING "Board type")
+endif()
 
 include(pico_sdk_import.cmake)
 

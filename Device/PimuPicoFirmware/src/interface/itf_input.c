@@ -24,16 +24,26 @@ static PimuGamepadIMUData imu_data;
 
 void ppf_itf_input_init(void)
 {
+    ppf_gamepad_input_report_5.left_stick.x = 0x7FF;
+    ppf_gamepad_input_report_5.left_stick.y = 0x7FF;
+    ppf_gamepad_input_report_5.right_stick.x = 0x7FF;
+    ppf_gamepad_input_report_5.right_stick.y = 0x7FF;
     ppf_gamepad_input_report_5.battery_voltage = 0x0ea5;
     ppf_gamepad_input_report_5.battery_charging_state = 0x20;
     ppf_gamepad_input_report_5.unknown_3[5] = 1;
 
     ppf_gamepad_input_report_9.power_info = PG_INPUT_POWER_INFO_EXTERNAL_POWER | 0x24; // battery level "9"
+    ppf_gamepad_input_report_9.left_stick.x = 0x7FF;
+    ppf_gamepad_input_report_9.left_stick.y = 0x7FF;
+    ppf_gamepad_input_report_9.right_stick.x = 0x7FF;
+    ppf_gamepad_input_report_9.right_stick.y = 0x7FF;
     ppf_gamepad_input_report_9.unknown = 0x30;
 
     imu_data.temperature = 0x100; // default value?
     imu_data.mode = 12;
     imu_data.confidence_flags = 0x3; // always report full confidence
+
+    received_inputs.input_flags = 0;
 }
 
 void ppf_itf_input_receive(PimuDeviceConnectorInputs* inputs)
