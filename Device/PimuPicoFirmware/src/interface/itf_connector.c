@@ -34,7 +34,7 @@ static void set_device_colors_cb(PimuDeviceConnector *connector, PimuDeviceConne
     ppf_config_queue_save();
 }
 
-static void set_inputs_cb(PimuDeviceConnector *connector, PimuDeviceConnectorGamepadInputs *inputs)
+static void set_inputs_cb(PimuDeviceConnector *connector, PimuDeviceConnectorInputs *inputs)
 {
     ppf_itf_input_receive(inputs);
 }

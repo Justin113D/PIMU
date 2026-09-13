@@ -7,7 +7,7 @@ void pdc_send_buffer_queue_message(PimuDeviceConnector *connector, PDCSendBuffer
 {
     if (send_buffer->message_queue_count >= PIMO_DEVICE_CONNECTOR_MESSAGE_QUEUE_SIZE)
     {
-        pdc_debug_print(connector, PDC_FIRMWARE_CONFIG_DEBUG_FEATURE_CONNECTOR, PDC_DEBUG_TYPE_ERROR, "Message queue is full!");
+        pdc_debug_print(connector, PDC_DEBUG_TYPE_ERROR, "Message queue is full!");
         return;
     }
 

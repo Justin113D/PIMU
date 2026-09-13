@@ -8,6 +8,7 @@
 		DeviceDisconnect = 2,
 		DeviceFirmware = 3,
 		DeviceGamepad = 4,
+		DeviceInputs = 5,
 
 		DesktopHandshake = 0x81,
 		DesktopDebug = 0x82,
@@ -33,8 +34,7 @@
 		None = 0,
 		RequestColors = 1,
 		SetColors = 2,
-		RequestPlayerLEDs = 3,
-		Input = 4,
+		RequestPlayerLEDs = 3
 	}
 
 	/// <summary>

@@ -3,7 +3,7 @@
 namespace J113D.Pimu.Desktop.Connector.Structs
 {
 	[Flags]
-	public enum GamepadButtons : uint
+	public enum InputButtons : uint
 	{
 		B = 0x00000001,
 		A = 0x00000002,

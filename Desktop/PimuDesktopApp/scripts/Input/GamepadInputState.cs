@@ -8,7 +8,7 @@ namespace J113D.Pimu.Desktop.App.Input
 	{
 		private const float HalfPi = float.Pi * 0.5f;
 
-		public GamepadButtons Buttons { get; set; }
+		public InputButtons Buttons { get; set; }
 
 		public Vector2 StickLeft { get; set; }
 
@@ -43,12 +43,13 @@ namespace J113D.Pimu.Desktop.App.Input
 
 		public readonly Quaternion Quaternion => Basis.FromEuler(new(Pitch, Yaw, 0), EulerOrder.Zyx).GetRotationQuaternion();
 
-		public GamepadInputs ToInputs()
+		public Inputs ToInputs(Inputs.InputFlags flags)
 		{
 			Quaternion quat = Quaternion * new Quaternion(Vector3.Right, float.Pi * -0.5f);
 
 			return new()
 			{
+				Flags = flags,
 				Buttons = Buttons,
 				StickLeftX = StickLeft.X,
 				StickLeftY = StickLeft.Y,
@@ -64,11 +65,14 @@ namespace J113D.Pimu.Desktop.App.Input
 
 	public partial class GamepadInputStateChangedEvent : Resource
 	{
-		public GamepadInputState State { get; init; }
+		public GamepadInputState State { get; }
 
-		public GamepadInputStateChangedEvent(GamepadInputState state)
+		public Inputs.InputFlags ChangedFlags { get; }
+
+		public GamepadInputStateChangedEvent(GamepadInputState state, Inputs.InputFlags changedFlags)
 		{
 			State = state;
+			ChangedFlags = changedFlags;
 		}
 	}
 }

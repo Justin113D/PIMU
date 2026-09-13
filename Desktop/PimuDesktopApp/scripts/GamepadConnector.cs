@@ -15,7 +15,9 @@ namespace J113D.Pimu.Desktop.App
 		private readonly RichTextLabel _debugOutput;
 		private string _queuedDebugOutput = string.Empty;
 
-		private GamepadInputState? _sendState;
+		private Inputs.InputFlags _changedFlags;
+
+		private GamepadInputState _sendState;
 
 		public string Port => _connector.Port;
 
@@ -66,21 +68,21 @@ namespace J113D.Pimu.Desktop.App
 				_queuedDebugOutput = string.Empty;
 			}
 
-			if(_sendState == null)
+			if(_changedFlags == default)
 			{
 				return;
 			}
 
 			try
 			{
-				await _connector.SendGamepadInputs(_sendState.Value.ToInputs());
+				await _connector.SendGamepadInputs(_sendState.ToInputs(_changedFlags));
 			}
 			catch
 			{
 				return;
 			}
 
-			_sendState = null;
+			_changedFlags = default;
 		}
 
 		public async Task RequestDeviceInfo()
@@ -132,7 +134,7 @@ namespace J113D.Pimu.Desktop.App
 				return;
 			}
 
-			_sendState = null;
+			_changedFlags = default;
 			EmitSignalLEDsChanged(new GamepadLEDsChangedEvent(new bool[4], false));
 
 			_connector.Dispose();
@@ -149,6 +151,7 @@ namespace J113D.Pimu.Desktop.App
 			}
 
 			_sendState = @event.State;
+			_changedFlags |= @event.ChangedFlags;
 		}
 	
 		public ValueTask SetConfig(FirmwareConfig config)

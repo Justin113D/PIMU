@@ -141,7 +141,7 @@ static void calculate_gyro_deltas(PimuGamepadIMUData* imu_data, float* new_quate
     imu_data->gyro_z = calculate_axis_delta(2, rotation_matrix) * delta;
 }
 
-void ppf_imu_update(PimuGamepadIMUData* imu_data, PimuDeviceConnectorGamepadInputs* received_inputs, bool calculate_gyro)
+void ppf_imu_update(PimuGamepadIMUData* imu_data, PimuDeviceConnectorInputGyro* received_inputs, bool calculate_gyro)
 {
     imu_data->quaternion_omitted_index = received_inputs->quat_extra >> 6;
     imu_data->quaternion_1 = received_inputs->quat_1 << 16 | ((received_inputs->quat_extra << 14) & 0xC000) | (received_inputs->quat_1 >> 2);

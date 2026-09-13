@@ -142,11 +142,11 @@ namespace J113D.Pimu.Desktop.App.UI.Window
 		
 		private async void ConnectAsync()
 		{
-			PimuConnector.ConnectionResult result = await AppController!.TryConnect(_options[_selectedOption].labelPort.Text);
-			CallDeferred(MethodName.FinishConnect, (int)result);
+			(PimuConnector.ConnectionResult result, string? error)= await AppController!.TryConnect(_options[_selectedOption].labelPort.Text);
+			CallDeferred(MethodName.FinishConnect, (int)result, error ?? new Variant());
 		}
 
-		private void FinishConnect(PimuConnector.ConnectionResult result)
+		private void FinishConnect(PimuConnector.ConnectionResult result, string? message)
 		{
 			_connectingTask = null;
 			BusyIndicator!.Visible = false;
@@ -163,7 +163,7 @@ namespace J113D.Pimu.Desktop.App.UI.Window
 				PimuConnector.ConnectionResult.OpenFailed => "Failed to open the port",
 				PimuConnector.ConnectionResult.VersionMismatch => "There is a PIMU device at this port, but is has a different version than the app",
 				PimuConnector.ConnectionResult.HandshakeFailed => "Device behind port is not a PIMU device",
-				_ => "An unknown error occured",
+				_ => message ?? "An unknown error occured",
 			};
 
 			DialogConnectError!.Show();

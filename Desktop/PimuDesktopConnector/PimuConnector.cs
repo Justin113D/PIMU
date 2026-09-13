@@ -70,7 +70,7 @@ namespace J113D.Pimu.Desktop.Connector
 			UnknownError
 		}
 
-		public static async Task<(ConnectionResult, PimuConnector?)> TryEstablishConnection(string port)
+		public static async Task<(ConnectionResult, string? error, PimuConnector?)> TryEstablishConnection(string port)
 		{
 			SerialStream? stream = null;
 			PimuConnector? connector = null;
@@ -78,12 +78,12 @@ namespace J113D.Pimu.Desktop.Connector
 			{
 				if (!DeviceList.Local.TryGetSerialDevice(out SerialDevice device, port))
 				{
-					return (ConnectionResult.NotFound, null);
+					return (ConnectionResult.NotFound, null, null);
 				}
 
 				if (!device.TryOpen(out stream))
 				{
-					return (ConnectionResult.OpenFailed, null);
+					return (ConnectionResult.OpenFailed, null, null);
 				}
 
 				connector = new(port, stream);
@@ -100,7 +100,7 @@ namespace J113D.Pimu.Desktop.Connector
 				byte[] handshakeSerialSequence = MessageSerializer.Serialize(handshake);
 
 				const int handshakeAttempts = 5;
-				const long handshakeWaitTicks = TimeSpan.TicksPerSecond * 5;
+				const long handshakeWaitTicks = TimeSpan.TicksPerMillisecond * 200;
 				Message receivedHandshake = default;
 
 				for (int i = 0; i < handshakeAttempts; i++)
@@ -133,25 +133,25 @@ namespace J113D.Pimu.Desktop.Connector
 					if(receivedHandshake.DataType != handshake.DataType)
 					{
 						connector.Dispose();
-						return (ConnectionResult.VersionMismatch, null);
+						return (ConnectionResult.VersionMismatch, null, null);
 					}
 					else
 					{
 						// confirming the connection
 						_ = Task.Run(connector.ReadAsyncTask);
 						await connector.SendMessage(new(MessageDestination.DeviceHandshake, 0, []));
-						return (ConnectionResult.Success, connector);
+						return (ConnectionResult.Success, null, connector);
 					}
 
 				}
 
 				connector.Dispose();
-				return (ConnectionResult.HandshakeFailed, null);
+				return (ConnectionResult.HandshakeFailed, null, null);
 			}
-			catch
+			catch(Exception exception)
 			{
 				connector?.Dispose();
-				return (ConnectionResult.UnknownError, null);
+				return (ConnectionResult.UnknownError, exception.Message, null);
 			}
 		}
 
@@ -254,11 +254,11 @@ namespace J113D.Pimu.Desktop.Connector
 			));
 		}
 
-		public ValueTask SendGamepadInputs(GamepadInputs inputs)
+		public ValueTask SendGamepadInputs(Inputs inputs)
 		{
 			return SendMessage(new(
-				MessageDestination.DeviceGamepad,
-				(byte)MessageDeviceGamepadDataType.Input,
+				MessageDestination.DeviceInputs,
+				(byte)inputs.Flags,
 				inputs.ToBytes()
 			));
 		}
@@ -291,10 +291,14 @@ namespace J113D.Pimu.Desktop.Connector
 			{
 				if (disposing)
 				{
-					if(_messageStream.CanWrite)
+					try
 					{
-						_messageStream.Write(MessageSerializer.Serialize(new(MessageDestination.DeviceDisconnect, 0, [])));
+						if(_messageStream.CanWrite)
+						{
+							_messageStream.Write(MessageSerializer.Serialize(new(MessageDestination.DeviceDisconnect, 0, [])));
+						}
 					}
+					catch { }
 
 					_messageStream.Dispose();
 				}

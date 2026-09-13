@@ -2,14 +2,27 @@
 
 namespace J113D.Pimu.Desktop.Connector.Structs
 {
-	public readonly struct GamepadInputs
+	public readonly struct Inputs
 	{
-		public GamepadButtons Buttons { get; init; }
+		[Flags]
+		public enum InputFlags : byte
+		{
+			Buttons = 0x01,
+			StickLeft = 0x02,
+			StickRight = 0x04,
+			Gyro = 0x08
+		}
+
+		public InputFlags Flags { get; init; }
+
+		public InputButtons Buttons { get; init; }
 
 		public float StickLeftX { get; init; }
 		public float StickLeftY { get; init; }
+
 		public float StickRightX { get; init; }
 		public float StickRightY { get; init; }
+
 		public float QuaternionW { get; init; }
 		public float QuaternionX { get; init; }
 		public float QuaternionY { get; init; }
@@ -66,16 +79,43 @@ namespace J113D.Pimu.Desktop.Connector.Structs
 		{
 			byte[] result = new byte[16];
 			Span<byte> span = result.AsSpan();
+			int size = 0;
 
-			Pack12BitVector(StickLeftX, StickLeftY, span[0..]);
-			Pack12BitVector(StickRightX, StickRightY, span[3..]);
-			PackQuaternion([QuaternionW, QuaternionX, QuaternionY, QuaternionZ], span[6..]);
+			if(Flags.HasFlag(InputFlags.Buttons))
+			{
+				span[0] = (byte)(((uint)Buttons) & 0xFF);
+				span[1] = (byte)((((uint)Buttons) >> 8) & 0xFF);
+				span[2] = (byte)((((uint)Buttons) >> 16) & 0xFF);
 
-			result[13] = (byte)(((uint)Buttons) & 0xFF);
-			result[14] = (byte)((((uint)Buttons) >> 8) & 0xFF);
-			result[15] = (byte)((((uint)Buttons) >> 16) & 0xFF);
+				size += 3;
+				span = span[3..];
+			}
 
-			return result;
+			if (Flags.HasFlag(InputFlags.StickLeft))
+			{
+				Pack12BitVector(StickLeftX, StickLeftY, span);
+
+				size += 3;
+				span = span[3..];
+			}
+
+			if (Flags.HasFlag(InputFlags.StickRight))
+			{
+				Pack12BitVector(StickRightX, StickRightY, span);
+
+				size += 3;
+				span = span[3..];
+			}
+
+			if (Flags.HasFlag(InputFlags.Gyro))
+			{
+				PackQuaternion([QuaternionW, QuaternionX, QuaternionY, QuaternionZ], span);
+
+				size += 7;
+				//span = span[7..];
+			}
+
+			return result[..size];
 		}
 	}
 }

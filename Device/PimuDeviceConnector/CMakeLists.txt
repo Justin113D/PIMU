@@ -12,6 +12,7 @@ add_library(${lib_name}
     src/message.c
     src/read_buffer.c
     src/send_buffer.c
+    src/communication.c
     src/connector.c
 )
 

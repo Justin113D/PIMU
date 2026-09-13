@@ -5,6 +5,6 @@
 #include "pimu_device_connector.h"
 #include <stdbool.h>
 
-void ppf_imu_update(PimuGamepadIMUData* imu_data, PimuDeviceConnectorGamepadInputs* received_inputs, bool calculate_gyro);
+void ppf_imu_update(PimuGamepadIMUData* imu_data, PimuDeviceConnectorInputGyro* received_inputs, bool calculate_gyro);
 
 #endif

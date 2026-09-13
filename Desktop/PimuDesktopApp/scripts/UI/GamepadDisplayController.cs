@@ -19,7 +19,7 @@ namespace J113D.Pimu.Desktop.App.UI
 		}
 
 
-		private (GamepadButtons button, Control mask)[] _maskMap = [];
+		private (InputButtons button, Control mask)[] _maskMap = [];
 		private Control[] _playerLEDMasks = [];
 
 		private bool _mouseOver;
@@ -67,8 +67,8 @@ namespace J113D.Pimu.Desktop.App.UI
 			Outline!.Modulate = HighlightingColor;
 			Outline!.Visible = false;
 
-			List<(GamepadButtons, Control)> maskMap = [];
-			foreach (GamepadButtons button in Enum.GetValues<GamepadButtons>())
+			List<(InputButtons, Control)> maskMap = [];
+			foreach (InputButtons button in Enum.GetValues<InputButtons>())
 			{
 				if (GetNodeOrNull<Control>($"%Mask_{button}") is Control mask)
 				{
@@ -96,18 +96,18 @@ namespace J113D.Pimu.Desktop.App.UI
 
 		private void UpdateDisplay(GamepadInputState state)
 		{
-			foreach ((GamepadButtons button, Control? mask) in _maskMap)
+			foreach ((InputButtons button, Control? mask) in _maskMap)
 			{
 				mask!.Visible = state.Buttons.HasFlag(button);
 			}
 
-			LeftStick!.Texture = state.Buttons.HasFlag(GamepadButtons.StickLeft)
+			LeftStick!.Texture = state.Buttons.HasFlag(InputButtons.StickLeft)
 				? LeftStickActive
 				: LeftStickDefault;
 
 			LeftStick!.OffsetTransformPositionRatio = state.StickLeft * _stickOffsetFactor;
 
-			RightStick!.Texture = state.Buttons.HasFlag(GamepadButtons.StickRight)
+			RightStick!.Texture = state.Buttons.HasFlag(InputButtons.StickRight)
 				? RightStickActive
 				: RightStickDefault;
 

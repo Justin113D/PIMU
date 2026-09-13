@@ -4,7 +4,7 @@
 // https://github.com/ndeadly/switch2_controller_research/blob/master/commands.md#command-0x0c---feature-select
 
 #define PG_FEATURE_SELECT_FEATURE_BUTTONS 0x01
-#define PG_FEATURE_SELECT_FEATURE_JOYSTICKS 0x02
+#define PG_FEATURE_SELECT_FEATURE_STICKS 0x02
 #define PG_FEATURE_SELECT_FEATURE_IMU 0x04
 #define PG_FEATURE_SELECT_FEATURE_MOUSE 0x10
 #define PG_FEATURE_SELECT_FEATURE_RUMBLE 0x20
@@ -34,7 +34,7 @@ PG_SUBCOMMAND_CALLBACK_DEF(feature_select, get_info)
     PG_RESPONSE_INIT(unknown);
 
     response->info[0] = request->flags & PG_FEATURE_SELECT_FEATURE_BUTTONS ? 0x07 : 0x00;
-    response->info[1] = request->flags & PG_FEATURE_SELECT_FEATURE_JOYSTICKS ? 0x07 : 0x00;
+    response->info[1] = request->flags & PG_FEATURE_SELECT_FEATURE_STICKS ? 0x07 : 0x00;
     response->info[2] = request->flags & PG_FEATURE_SELECT_FEATURE_IMU ? 0x01 : 0x00;
     response->info[3] = request->flags & PG_FEATURE_SELECT_FEATURE_MAGNETOMETER ? 0x01 : 0x00;
     response->info[4] = request->flags & PG_FEATURE_SELECT_FEATURE_MOUSE ? 0x01 : 0x00;

@@ -5,6 +5,7 @@ using J113D.Pimu.Desktop.App.UI;
 using J113D.Pimu.Desktop.App.UI.Window;
 using J113D.Pimu.Desktop.Connector;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace J113D.Pimu.Desktop.App
 {
@@ -93,9 +94,9 @@ namespace J113D.Pimu.Desktop.App
 		}
 
 
-		public async Task<PimuConnector.ConnectionResult> TryConnect(string port)
+		public async Task<(PimuConnector.ConnectionResult result, string? error)> TryConnect(string port)
 		{
-			(PimuConnector.ConnectionResult result, PimuConnector? connector) result = await PimuConnector.TryEstablishConnection(port);
+			(PimuConnector.ConnectionResult result, string? error, PimuConnector? connector) result = await PimuConnector.TryEstablishConnection(port);
 
 			if(result.result == PimuConnector.ConnectionResult.Success)
 			{
@@ -110,7 +111,7 @@ namespace J113D.Pimu.Desktop.App
 				CallDeferred(MethodName.OnConnectorSetup);
 			}
 
-			return result.result;
+			return (result.result, result.error);
 		}
 
 		private void OnConnectorSetup()

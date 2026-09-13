@@ -11,7 +11,6 @@
 
 #define PDC_MESSAGE_DATA_MAX_SIZE 256
 
-
 #define PDC_FIRMWARE_CONFIG_DEBUG_MODE_NONE 0
 #define PDC_FIRMWARE_CONFIG_DEBUG_MODE_UART_ONLY 1
 #define PDC_FIRMWARE_CONFIG_DEBUG_MODE_CONNECTOR 2
@@ -21,11 +20,10 @@
 #define PDC_FIRMWARE_CONFIG_DEBUG_FEATURE_CONNECTOR 0x04
 #define PDC_FIRMWARE_CONFIG_DEBUG_FEATURE_GAMEPAD 0x08
 
-typedef PACKED_STRUCT
-{
-    uint16_t x : 12;
-    uint16_t y : 12;
-} PDC12BitVector2;
+#define PDC_INPUT_FLAG_BUTTONS 0x01
+#define PDC_INPUT_FLAG_STICK_LEFT 0x02
+#define PDC_INPUT_FLAG_STICK_RIGHT 0x04
+#define PDC_INPUT_FLAG_GYRO 0x08
 
 typedef PACKED_STRUCT
 {
@@ -77,18 +75,30 @@ typedef PACKED_STRUCT
     uint8_t unknown_21 : 1;
     uint8_t unknown_22 : 1;
     uint8_t unknown_23 : 1;
-} PimuDeviceConnectorGamepadButtons;
+} PimuDeviceConnectorInputButtons;
 
 typedef PACKED_STRUCT
-{   
-    PDC12BitVector2 stick_left;
-    PDC12BitVector2 stick_right;
+{
+    uint16_t x : 12;
+    uint16_t y : 12;
+} PimuDeviceConnectorInputStick;
+
+typedef PACKED_STRUCT
+{
     uint16_t quat_1;
     uint16_t quat_2;
     uint16_t quat_3;
     uint8_t quat_extra;
-    PimuDeviceConnectorGamepadButtons buttons;
-} PimuDeviceConnectorGamepadInputs;
+} PimuDeviceConnectorInputGyro;
+
+typedef PACKED_STRUCT
+{   
+    uint8_t input_flags;
+    PimuDeviceConnectorInputButtons buttons;
+    PimuDeviceConnectorInputStick stick_left;
+    PimuDeviceConnectorInputStick stick_right;
+    PimuDeviceConnectorInputGyro gyro;
+} PimuDeviceConnectorInputs;
 
 //--------------------------------------------------------------------+
 
@@ -164,7 +174,7 @@ void pimu_device_connector_set_gamepad_set_colors_cb(PimuDeviceConnector* connec
 typedef void (*PDCSetGamepadColorsCB)(PimuDeviceConnector* source, PimuDeviceConnectorGamepadColors* colors);
 void pimu_device_connector_set_gamepad_get_colors_cb(PimuDeviceConnector* connector, PDCSetGamepadColorsCB callback);
 
-typedef void (*PDCSetGamepadInputsCB)(PimuDeviceConnector* source, PimuDeviceConnectorGamepadInputs* inputs);
+typedef void (*PDCSetGamepadInputsCB)(PimuDeviceConnector* source, PimuDeviceConnectorInputs* inputs);
 void pimu_device_connector_set_gamepad_set_inputs_cb(PimuDeviceConnector* connector, PDCSetGamepadInputsCB callback);
 
 //--------------------------------------------------------------------+

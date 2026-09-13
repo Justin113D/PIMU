@@ -17,37 +17,30 @@ namespace J113D.Pimu.Desktop.App.Input
 			public StringName Reduce { get; init; }
 		}
 		
-		enum HandledState
-		{
-			None,
-			Handled,
-			HandledChanged
-		}
+		private static readonly StringName HotkeyToggleRightStickUp = "Hotkey_ToggleRightStickUp";
 
-		private static StringName HotkeyToggleRightStickUp = "Hotkey_ToggleRightStickUp";
-
-		private static (StringName action, GamepadButtons button)[] _actionButtonMapping { get; } = [
-			(GamepadActions.A, GamepadButtons.A),
-			(GamepadActions.B, GamepadButtons.B),
-			(GamepadActions.X, GamepadButtons.X),
-			(GamepadActions.Y, GamepadButtons.Y),
-			(GamepadActions.DPadUp, GamepadButtons.DPadUp),
-			(GamepadActions.DPadRight, GamepadButtons.DPadRight),
-			(GamepadActions.DPadDown, GamepadButtons.DPadDown),
-			(GamepadActions.DPadLeft, GamepadButtons.DPadLeft),
-			(GamepadActions.L, GamepadButtons.L),
-			(GamepadActions.ZL, GamepadButtons.ZL),
-			(GamepadActions.GL, GamepadButtons.GL),
-			(GamepadActions.R, GamepadButtons.R),
-			(GamepadActions.ZR, GamepadButtons.ZR),
-			(GamepadActions.GR, GamepadButtons.GR),
-			(GamepadActions.Plus, GamepadButtons.Plus),
-			(GamepadActions.Minus, GamepadButtons.Minus),
-			(GamepadActions.Home, GamepadButtons.Home),
-			(GamepadActions.Capture, GamepadButtons.Capture),
-			(GamepadActions.Chat, GamepadButtons.Chat),
-			(GamepadActions.LeftStickPress, GamepadButtons.StickLeft),
-			(GamepadActions.RightStickPress, GamepadButtons.StickRight)
+		private static readonly (StringName action, InputButtons button)[] _actionButtonMapping = [
+			(GamepadActions.A, InputButtons.A),
+			(GamepadActions.B, InputButtons.B),
+			(GamepadActions.X, InputButtons.X),
+			(GamepadActions.Y, InputButtons.Y),
+			(GamepadActions.DPadUp, InputButtons.DPadUp),
+			(GamepadActions.DPadRight, InputButtons.DPadRight),
+			(GamepadActions.DPadDown, InputButtons.DPadDown),
+			(GamepadActions.DPadLeft, InputButtons.DPadLeft),
+			(GamepadActions.L, InputButtons.L),
+			(GamepadActions.ZL, InputButtons.ZL),
+			(GamepadActions.GL, InputButtons.GL),
+			(GamepadActions.R, InputButtons.R),
+			(GamepadActions.ZR, InputButtons.ZR),
+			(GamepadActions.GR, InputButtons.GR),
+			(GamepadActions.Plus, InputButtons.Plus),
+			(GamepadActions.Minus, InputButtons.Minus),
+			(GamepadActions.Home, InputButtons.Home),
+			(GamepadActions.Capture, InputButtons.Capture),
+			(GamepadActions.Chat, InputButtons.Chat),
+			(GamepadActions.LeftStickPress, InputButtons.StickLeft),
+			(GamepadActions.RightStickPress, InputButtons.StickRight)
 		];
 
 		private readonly static JoystickMapping[] _actionJoystickMapping = [
@@ -86,18 +79,22 @@ namespace J113D.Pimu.Desktop.App.Input
 			CheckButtonRightStickUp!.Toggled += OnRightStickUpToggled;
 		}
 
-		private static Vector2 ConstructJoystick(InputEvent inputEvent, JoystickMapping mapping, Vector2 previous, ref HandledState state)
+		private static bool ConstructJoystick(InputEvent inputEvent, JoystickMapping mapping, Vector2 previous, out Vector2 output, ref bool handled)
 		{
+			output = default;
+
 			if (!inputEvent.IsAction(mapping.Up)
 				&& !inputEvent.IsAction(mapping.Right)
 				&& !inputEvent.IsAction(mapping.Down)
 				&& !inputEvent.IsAction(mapping.Left)
 				&& !inputEvent.IsAction(mapping.Reduce))
 			{
-				return previous;
+				return false;
 			}
 
-			Vector2 vector = Godot.Input.GetVector(
+			handled = true;
+
+			output = Godot.Input.GetVector(
 				mapping.Left,
 				mapping.Right,
 				mapping.Down,
@@ -106,37 +103,25 @@ namespace J113D.Pimu.Desktop.App.Input
 
 			if (Godot.Input.IsActionPressed(mapping.Reduce))
 			{
-				vector *= 0.5f;
+				output *= 0.5f;
 			}
 
-			if (vector.DistanceTo(previous) > 0.01f)
-			{
-				state = HandledState.HandledChanged;
-				return vector;
-			}
-
-			if(state == HandledState.None)
-			{
-				state = HandledState.Handled;
-			}
-
-			return previous;
+			return output.DistanceTo(previous) >= 0.01f;
 		}
 
-		private HandledState UpdateGamepadState(InputEvent inputEvent)
+		private bool UpdateGamepadState(InputEvent inputEvent, out Inputs.InputFlags changed)
 		{
-			HandledState result = HandledState.None;
+			bool result = false;
+			changed = default;
 			GamepadInputState state = State;
 
-			if(inputEvent is InputEventMouseMotion mouseMotion)
+			if (inputEvent is InputEventMouseMotion mouseMotion)
 			{
-				if(mouseMotion.Relative != Vector2.Zero || mouseMotion.Relative != state.PointerDelta)
+				result = true;
+
+				if (mouseMotion.Relative != Vector2.Zero || mouseMotion.ScreenRelative != state.PointerDelta)
 				{
-					result = HandledState.HandledChanged;
-				}
-				else
-				{
-					result = HandledState.Handled;
+					changed |= Inputs.InputFlags.Gyro;
 				}
 
 				state.PointerDelta = mouseMotion.ScreenRelative;
@@ -145,17 +130,20 @@ namespace J113D.Pimu.Desktop.App.Input
 			}
 			else
 			{
-				foreach ((StringName action, GamepadButtons button) in _actionButtonMapping)
+				foreach ((StringName action, InputButtons button) in _actionButtonMapping)
 				{
 					if (!inputEvent.IsAction(action))
 					{
 						continue;
 					}
 
+					result = true;
 					bool pressed = inputEvent.IsPressed();
+
 					if(pressed != state.Buttons.HasFlag(button))
 					{
-						result = HandledState.HandledChanged;
+						changed |= Inputs.InputFlags.Buttons;
+
 						if(pressed)
 						{
 							state.Buttons |= button;
@@ -165,26 +153,30 @@ namespace J113D.Pimu.Desktop.App.Input
 							state.Buttons &= ~button;
 						}
 					}
-					else if(result == HandledState.None)
-					{
-						result = HandledState.Handled;
-					}
 				}
 			
-				state.StickLeft = ConstructJoystick(inputEvent, _actionJoystickMapping[0], state.StickLeft, ref result);
-				state.StickRight = ConstructJoystick(inputEvent, _actionJoystickMapping[1], state.StickRight, ref result);
+				if(ConstructJoystick(inputEvent, _actionJoystickMapping[0], state.StickLeft, out Vector2 newStickLeft, ref result))
+				{
+					state.StickLeft = newStickLeft;
+					changed |= Inputs.InputFlags.StickLeft;
+				}
+
+				if (ConstructJoystick(inputEvent, _actionJoystickMapping[1], state.StickRight, out Vector2 newStickRight, ref result))
+				{
+					state.StickRight = newStickRight;
+					changed |= Inputs.InputFlags.StickRight;
+				}
+
 
 				if(inputEvent.IsAction(HotkeyToggleRightStickUp))
 				{
+					result = true;
+
 					if(inputEvent.IsPressed())
 					{
 						CheckButtonRightStickUp!.SetPressedNoSignal(!CheckButtonRightStickUp.ButtonPressed);
 						state.ForceRightStickUp = CheckButtonRightStickUp.ButtonPressed;
-						result = HandledState.HandledChanged;
-					}
-					else if (result == HandledState.None)
-					{
-						result = HandledState.Handled;
+						changed |= Inputs.InputFlags.StickRight;
 					}
 				}
 			}
@@ -202,18 +194,16 @@ namespace J113D.Pimu.Desktop.App.Input
 				return;
 			}
 
-			HandledState handledState = UpdateGamepadState(@event);
-
-			if (handledState == HandledState.None)
+			if(!UpdateGamepadState(@event, out Inputs.InputFlags changedFlags))
 			{
 				return;
 			}
 
 			GetViewport().SetInputAsHandled();
 
-			if (handledState == HandledState.HandledChanged)
+			if (changedFlags != default)
 			{
-				EmitSignalGamepadStateChanged(new GamepadInputStateChangedEvent(State));
+				EmitSignalGamepadStateChanged(new GamepadInputStateChangedEvent(State, changedFlags));
 			}
 		}
 	
@@ -236,22 +226,8 @@ namespace J113D.Pimu.Desktop.App.Input
 			GamepadInputState state = State;
 			state.ForceRightStickUp = pressed;
 			State = state;
-			EmitSignalGamepadStateChanged(new GamepadInputStateChangedEvent(State));
+			EmitSignalGamepadStateChanged(new GamepadInputStateChangedEvent(State, Inputs.InputFlags.StickRight));
 		}
 
-		//public override void _Process(double delta)
-		//{
-		//	base._Process(delta);
-
-		//	if (!_captureInput)
-		//	{
-		//		return;
-		//	}
-
-		//	GamepadInputState state = State;
-		//	state.Yaw += 0.005f;
-		//	State = state;
-		//	EmitSignalGamepadStateChanged(new GamepadInputStateChangedEvent(State));
-		//}
 	}
 }

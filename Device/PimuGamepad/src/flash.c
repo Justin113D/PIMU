@@ -38,14 +38,14 @@ typedef PACKED_STRUCT
     uint8_t unknown_1;
     uint8_t unknown_2;
     uint8_t unknown_3;
-} PGFlashJoystickParameters;
+} PGFlashStickParameters;
 
 typedef PACKED_STRUCT
 {
     PG12BitVector2 center;
     PG12BitVector2 min;
     PG12BitVector2 max;
-} PGFlashJoystickCalibration;
+} PGFlashStickCalibration;
 
 typedef PACKED_STRUCT
 {
@@ -64,10 +64,10 @@ typedef PACKED_STRUCT
     PimuGamepadDeviceColors device_colors;
     float motion_calibration_temperature;
     PGFlashBias gyro_bias;
-    PGFlashJoystickParameters joystick_1_parameters;
-    PGFlashJoystickCalibration joystick_1_calibration;
-    PGFlashJoystickParameters joystick_2_parameters;
-    PGFlashJoystickCalibration joystick_2_calibration;
+    PGFlashStickParameters stick_1_parameters;
+    PGFlashStickCalibration stick_1_calibration;
+    PGFlashStickParameters stick_2_parameters;
+    PGFlashStickCalibration stick_2_calibration;
     PGFlashBias magnetometer_bias;
     PGFlashBias accelerometer_bias;
     uint8_t end[];
@@ -76,9 +76,9 @@ typedef PACKED_STRUCT
 
 static const PGFlashOffsetMapping factory_data_1_flash_offset_map[] = {
     OFFSET_MAPPING_RANGE(PGFlashFactoryData1, unknown_1, motion_calibration_temperature, 0),
-    OFFSET_MAPPING_RANGE(PGFlashFactoryData1, motion_calibration_temperature, joystick_1_parameters, 0x40),
-    OFFSET_MAPPING_RANGE(PGFlashFactoryData1, joystick_1_parameters, joystick_2_parameters, 0x80),
-    OFFSET_MAPPING_RANGE(PGFlashFactoryData1, joystick_2_parameters, magnetometer_bias, 0xC0),
+    OFFSET_MAPPING_RANGE(PGFlashFactoryData1, motion_calibration_temperature, stick_1_parameters, 0x40),
+    OFFSET_MAPPING_RANGE(PGFlashFactoryData1, stick_1_parameters, stick_2_parameters, 0x80),
+    OFFSET_MAPPING_RANGE(PGFlashFactoryData1, stick_2_parameters, magnetometer_bias, 0xC0),
     OFFSET_MAPPING_RANGE(PGFlashFactoryData1, magnetometer_bias, end, 0x100),
 };  
 
@@ -113,7 +113,7 @@ static const uint32_t factory_data_2_flash_offset = 0x13E00;
 // Default factory data
 //--------------------------------------------------------------------+
 
-static const PGFlashJoystickParameters default_joystick_parameters = {
+static const PGFlashStickParameters default_stick_parameters = {
     .unknown_0 = 1,
     .vectors = {
         { 0x9AD, 0x9AD },
@@ -129,7 +129,7 @@ static const PGFlashJoystickParameters default_joystick_parameters = {
     .unknown_3 = 0xFF
 };
 
-static const PGFlashJoystickCalibration default_jostick_calibration = {
+static const PGFlashStickCalibration default_jostick_calibration = {
     .center = { 0x7FF, 0x7FF },
     .min = { 0x7FF, 0x7FF },
     .max = { 0x7FF, 0x7FF },
@@ -144,10 +144,10 @@ static const PGFlashFactoryData1 default_factory_data_1 = {
     .device_colors = default_device_colors,
     .motion_calibration_temperature = 25.0f,
     .gyro_bias = { 0 },
-    .joystick_1_parameters = default_joystick_parameters,
-    .joystick_1_calibration = default_jostick_calibration,
-    .joystick_1_parameters = default_joystick_parameters,
-    .joystick_2_calibration = default_jostick_calibration,
+    .stick_1_parameters = default_stick_parameters,
+    .stick_1_calibration = default_jostick_calibration,
+    .stick_1_parameters = default_stick_parameters,
+    .stick_2_calibration = default_jostick_calibration,
     .magnetometer_bias = { 0 },
     .accelerometer_bias = { 0, 0, 9.81f }
 };
