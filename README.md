@@ -48,3 +48,8 @@ While in this mode, the app checks your keyboard and mouse inputs against your i
 If enabled in the firmware settings, the pico will send debug information over the second UART channel exposed via pins GPIO8 (UART1 TX) and GPIO9 (UART1 RX).
 
 You can also enable receiving debug information via your primary connection, although this will not send all debug info to prevent recursive debug information. The output can be viewed by enabling the debug output in the app settings.
+
+# Development Resources 
+[Ndeadlys Switch 2 controller research](https://github.com/ndeadly/switch2_controller_research/tree/master) - Helped tremendously in implementing the USB and HID commands (also has a discord link) <br/>
+[Mizuyoukanaos Switch 2 pro controller emulator](https://github.com/mizuyoukanao/NX2-ProController-Emulation) - A similar project that served as a template for the pico code at the start <br/>
+[My Switch 2 usb sniffer](https://github.com/Justin113D/Switch2USBSniffer) - a tool i made to look into the switch 2 motion data <br/>
