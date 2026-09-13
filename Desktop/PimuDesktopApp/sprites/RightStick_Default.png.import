@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b3snbq5s4hunt"
 path.bptc="res://.godot/imported/RightStick_Default.png-a03d7e3ab8496626b4c066dbb7cf7481.bptc.ctex"
+path.astc="res://.godot/imported/RightStick_Default.png-a03d7e3ab8496626b4c066dbb7cf7481.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://sprites/RightStick_Default.png"
-dest_files=["res://.godot/imported/RightStick_Default.png-a03d7e3ab8496626b4c066dbb7cf7481.bptc.ctex"]
+dest_files=["res://.godot/imported/RightStick_Default.png-a03d7e3ab8496626b4c066dbb7cf7481.bptc.ctex", "res://.godot/imported/RightStick_Default.png-a03d7e3ab8496626b4c066dbb7cf7481.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bra7ir8cwbbdw"
 path.bptc="res://.godot/imported/GamepadIcon_Body.png-8bc5e091d4d25ffc4259811bc2538d25.bptc.ctex"
+path.astc="res://.godot/imported/GamepadIcon_Body.png-8bc5e091d4d25ffc4259811bc2538d25.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://sprites/GamepadIcon_Body.png"
-dest_files=["res://.godot/imported/GamepadIcon_Body.png-8bc5e091d4d25ffc4259811bc2538d25.bptc.ctex"]
+dest_files=["res://.godot/imported/GamepadIcon_Body.png-8bc5e091d4d25ffc4259811bc2538d25.bptc.ctex", "res://.godot/imported/GamepadIcon_Body.png-8bc5e091d4d25ffc4259811bc2538d25.astc.ctex"]
 
 [params]
 

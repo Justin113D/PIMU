@@ -39,7 +39,7 @@ project/assembly_name="Pimu Desktop App"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/zylann.editor_debugger/plugin.cfg")
+enabled=PackedStringArray()
 
 [gui]
 
@@ -215,3 +215,4 @@ Hotkey_ToggleRightStickUp={
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

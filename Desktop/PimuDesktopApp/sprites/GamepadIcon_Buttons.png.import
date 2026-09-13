@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://om1cm8gg41ve"
 path.bptc="res://.godot/imported/GamepadIcon_Buttons.png-5a5d990b05d85cc605ddf1568a62c07d.bptc.ctex"
+path.astc="res://.godot/imported/GamepadIcon_Buttons.png-5a5d990b05d85cc605ddf1568a62c07d.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://sprites/GamepadIcon_Buttons.png"
-dest_files=["res://.godot/imported/GamepadIcon_Buttons.png-5a5d990b05d85cc605ddf1568a62c07d.bptc.ctex"]
+dest_files=["res://.godot/imported/GamepadIcon_Buttons.png-5a5d990b05d85cc605ddf1568a62c07d.bptc.ctex", "res://.godot/imported/GamepadIcon_Buttons.png-5a5d990b05d85cc605ddf1568a62c07d.astc.ctex"]
 
 [params]
 

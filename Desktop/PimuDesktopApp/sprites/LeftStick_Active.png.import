@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ctv28v8c8lmyd"
 path.bptc="res://.godot/imported/LeftStick_Active.png-bcd033948036e926ffd9cc0310c70610.bptc.ctex"
+path.astc="res://.godot/imported/LeftStick_Active.png-bcd033948036e926ffd9cc0310c70610.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://sprites/LeftStick_Active.png"
-dest_files=["res://.godot/imported/LeftStick_Active.png-bcd033948036e926ffd9cc0310c70610.bptc.ctex"]
+dest_files=["res://.godot/imported/LeftStick_Active.png-bcd033948036e926ffd9cc0310c70610.bptc.ctex", "res://.godot/imported/LeftStick_Active.png-bcd033948036e926ffd9cc0310c70610.astc.ctex"]
 
 [params]
 

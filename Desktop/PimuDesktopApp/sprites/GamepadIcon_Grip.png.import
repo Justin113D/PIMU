@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cwkqeaxft5xx5"
 path.bptc="res://.godot/imported/GamepadIcon_Grip.png-6bf27ffe2a80a619c55f2e30d1b1bf84.bptc.ctex"
+path.astc="res://.godot/imported/GamepadIcon_Grip.png-6bf27ffe2a80a619c55f2e30d1b1bf84.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://sprites/GamepadIcon_Grip.png"
-dest_files=["res://.godot/imported/GamepadIcon_Grip.png-6bf27ffe2a80a619c55f2e30d1b1bf84.bptc.ctex"]
+dest_files=["res://.godot/imported/GamepadIcon_Grip.png-6bf27ffe2a80a619c55f2e30d1b1bf84.bptc.ctex", "res://.godot/imported/GamepadIcon_Grip.png-6bf27ffe2a80a619c55f2e30d1b1bf84.astc.ctex"]
 
 [params]
 
