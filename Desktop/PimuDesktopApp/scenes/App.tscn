@@ -200,7 +200,7 @@ stretch = true
 
 [node name="ButtonMask" type="SubViewport" parent="VBoxContainer/HBoxContainer/Container_GamepadDisplay/AspectRatioContainer/SubViewportContainer_Mask" unique_id=55563899]
 handle_input_locally = false
-size = Vector2i(1027, 1027)
+size = Vector2i(988, 988)
 render_target_clear_mode = 1
 render_target_update_mode = 4
 
@@ -654,7 +654,7 @@ stretch = true
 transparent_bg = true
 handle_input_locally = false
 msaa_3d = 2
-size = Vector2i(246, 246)
+size = Vector2i(236, 236)
 render_target_update_mode = 4
 
 [node name="Node3D" type="Node3D" parent="VBoxContainer/HBoxContainer/Container_GamepadDisplay/AspectRatioContainer/Container_Rotation/SubViewportContainer/SubViewport" unique_id=1443898358]
@@ -694,6 +694,15 @@ theme_override_fonts/normal_font = SubResource("SystemFont_eqcks")
 scroll_following = true
 context_menu_enabled = true
 selection_enabled = true
+
+[node name="Container_Footer" type="HBoxContainer" parent="VBoxContainer" unique_id=719896137]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Container_Footer" unique_id=706952800]
+self_modulate = Color(1, 1, 1, 0.5019608)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Version 1.0.0"
 
 [connection signal="GamepadStateChanged" from="InputHandler" to="VBoxContainer/HBoxContainer/Container_GamepadDisplay" method="OnGamepadStateChanged"]
 [connection signal="id_pressed" from="VBoxContainer/Container_ToolBar/MenuBar/PIMU Device" to="." method="OnPimuMenuIDPressed"]
