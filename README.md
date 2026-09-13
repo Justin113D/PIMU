@@ -6,7 +6,7 @@ PIMU is a combination of desktop app and Raspberry pico firmware to play Switch 
 The goal of this tool is to convert mouse (Pointer) signals to gyro (IMU) controls. This is achieved by having a Pico be plugged into the switch 2 via USB and simulating pro controller 2 behavior, which receives its inputs from a desktop running the PIMU desktop app (connected via bluetooth or a USB-TTL interface).
 
 > [!NOTE]  
-> This does not require your console to be modified with in any way! You can use this on any the Switch 2 as is
+> This does not require your console to be modified in any way! You can use this on any the Switch 2 as is
 
 # Supported games
 This software has primarily been designed to be used and been tested with Splatoon 3 and Splatoon Raiders. While other games can be played with it too, there is no guarantee that the gyro inputs will work for every other game as well.
